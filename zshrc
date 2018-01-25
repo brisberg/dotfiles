@@ -1,5 +1,5 @@
 # If you come from bash you might have to change your $PATH.
-export PATH=$HOME/bin:/usr/local/bin:$PATH
+# export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
 export ZSH=/Users/brisberg/.oh-my-zsh
@@ -51,13 +51,16 @@ ZSH_THEME="robbyrussell"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git)
+plugins=(git, virtualenvwrapper)
 
 source $ZSH/oh-my-zsh.sh
 
 # User configuration
 
 source ~/.profile
+
+# Python config virtualenv
+export WORKON_HOME=~/.virtualenvs
 
 # export MANPATH="/usr/local/man:$MANPATH"
 
@@ -95,3 +98,21 @@ alias gaa="git add ."
 alias gap="git add -p"
 alias grbc="git rebase --continue"
 alias grba="git rebase --abort"
+
+alias gotods="cd /Users/brisberg/Library/Application\ Support/Steam/steamapps/common/dont_starve/dontstarve_steam.app/Contents"
+alias gotodst="cd /Users/brisberg/Library/Application\ Support/Steam/steamapps/common/Don\'t\ Starve\ Together/dontstarve_steam.app/Contents"
+
+# Don't Starve mod syncing
+local MOD_PROJECT_DIR="/Users/brisberg/DevProjects"
+local DS_MOD_DIR="/Users/brisberg/Library/Application\ Support/Steam/steamapps/common/dont_starve/dontstarve_steam.app/Contents/mods"
+local DST_MOD_DIR="/Users/brisberg/Library/Application\ Support/Steam/steamapps/common/Don\'t\ Starve\ Together/dontstarve_steam.app/Contents/mods"
+
+function sync_ds_mod() {
+  rm -rf $DS_MOD_DIR/$1
+  cp -R $MOD_PROJECT_DIR/$1/mod/ $DS_MOD_DIR/$1
+}
+
+function sync_dst_mod() {
+  rm -rf $DST_MOD_DIR/$1
+  cp -R $MOD_PROJECT_DIR/$1/mod/ $DST_MOD_DIR/$1
+}
