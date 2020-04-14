@@ -98,6 +98,7 @@ alias gaa="git add ."
 alias gap="git add -p"
 alias grbc="git rebase --continue"
 alias grba="git rebase --abort"
+alias gl="git log --all --graph --decorate --oneline --simplify-by-decoration"
 
 alias gotods="cd /Users/brisberg/Library/Application\ Support/Steam/steamapps/common/dont_starve/dontstarve_steam.app/Contents"
 alias gotodst="cd /Users/brisberg/Library/Application\ Support/Steam/steamapps/common/Don\'t\ Starve\ Together/dontstarve_steam.app/Contents"
@@ -116,3 +117,12 @@ function sync_dst_mod() {
   rm -rf $DST_MOD_DIR/$1
   cp -R $MOD_PROJECT_DIR/$1/mod/ $DST_MOD_DIR/$1
 }
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/Applications/google-cloud-sdk/path.zsh.inc' ]; then source '/Applications/google-cloud-sdk/path.zsh.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/Applications/google-cloud-sdk/completion.zsh.inc' ]; then source '/Applications/google-cloud-sdk/completion.zsh.inc'; fi
+
+# Golang
+export GOPATH="/Users/brisberg/go"
