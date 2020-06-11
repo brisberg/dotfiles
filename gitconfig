@@ -3,3 +3,11 @@
 	email = brandon.risberg@gmail.com
 [push]
 	default = matching
+[alias]
+  # Return the name of the current branch (used in other aliases)
+	branch-name = "!git rev-parse --abbrev-ref HEAD"
+	# Writing a local branch description
+	# from https://stackoverflow.com/a/8858853
+	description = "!git config branch.$(git branch-name).description"
+	reword = branch --edit-description
+	desc = description
