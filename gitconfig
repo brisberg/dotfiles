@@ -5,9 +5,14 @@
 	default = matching
 [alias]
   # Return the name of the current branch (used in other aliases)
-	branch-name = "!git rev-parse --abbrev-ref HEAD"
+	branch-name = "rev-parse --abbrev-ref HEAD"
 	# Writing a local branch description
 	# from https://stackoverflow.com/a/8858853
 	description = "!git config branch.$(git branch-name).description"
 	reword = branch --edit-description
 	desc = description
+	# Toolchain commands for @brisberg repositories
+	toolchain-upgrade = "!git fetch toolchain \
+		$(git ls-remote --tags --refs --sort=\"version:refname\" toolchain \
+		| awk -F/ 'END{print$NF}') \
+		&& git merge FETCH_HEAD"
