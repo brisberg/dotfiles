@@ -2,7 +2,7 @@
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
-export ZSH=/Users/brisberg/.oh-my-zsh
+export ZSH=$HOME/.oh-my-zsh
 
 # Set name of the theme to load. Optionally, if you set this to "random"
 # it'll load a random theme each time that oh-my-zsh is loaded.
@@ -100,13 +100,13 @@ alias grbc="git rebase --continue"
 alias grba="git rebase --abort"
 alias gl="git log --all --graph --decorate --oneline --simplify-by-decoration"
 
-alias gotods="cd /Users/brisberg/Library/Application\ Support/Steam/steamapps/common/dont_starve/dontstarve_steam.app/Contents"
-alias gotodst="cd /Users/brisberg/Library/Application\ Support/Steam/steamapps/common/Don\'t\ Starve\ Together/dontstarve_steam.app/Contents"
+alias gotods="cd $HOME/Library/Application\ Support/Steam/steamapps/common/dont_starve/dontstarve_steam.app/Contents"
+alias gotodst="cd $HOME/Library/Application\ Support/Steam/steamapps/common/Don\'t\ Starve\ Together/dontstarve_steam.app/Contents"
 
 # Don't Starve mod syncing
-local MOD_PROJECT_DIR="/Users/brisberg/DevProjects"
-local DS_MOD_DIR="/Users/brisberg/Library/Application\ Support/Steam/steamapps/common/dont_starve/dontstarve_steam.app/Contents/mods"
-local DST_MOD_DIR="/Users/brisberg/Library/Application\ Support/Steam/steamapps/common/Don\'t\ Starve\ Together/dontstarve_steam.app/Contents/mods"
+local MOD_PROJECT_DIR="$HOME/DevProjects"
+local DS_MOD_DIR="$HOME/Library/Application\ Support/Steam/steamapps/common/dont_starve/dontstarve_steam.app/Contents/mods"
+local DST_MOD_DIR="$HOME/Library/Application\ Support/Steam/steamapps/common/Don\'t\ Starve\ Together/dontstarve_steam.app/Contents/mods"
 
 function sync_ds_mod() {
   rm -rf $DS_MOD_DIR/$1
@@ -125,4 +125,4 @@ if [ -f '/Applications/google-cloud-sdk/path.zsh.inc' ]; then source '/Applicati
 if [ -f '/Applications/google-cloud-sdk/completion.zsh.inc' ]; then source '/Applications/google-cloud-sdk/completion.zsh.inc'; fi
 
 # Golang
-export GOPATH="/Users/brisberg/go"
+export GOPATH="$HOME/go"
