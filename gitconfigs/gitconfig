@@ -1,10 +1,15 @@
 # User config based on directory
 [include]
 	path = ~/.gitconfigs/git-personal.conf
-[includeIf "gitdir:~/DevProjects/zwei"]
+[includeIf "gitdir:~/DevProjects/zwei/"]
 	path = ~/.gitconfigs/git-private.conf
-[includeIf "gitdir:~/DevProjects/work"]
+[includeIf "gitdir:~/DevProjects/work/"]
 	path = ~/.gitconfigs/git-work.conf
+
+[credential]
+  helper = osxkeychain
+	# Forces re-auth for each repo so multiple accounts can be used
+  # useHttpPath = true
 
 [push]
 	default = matching
