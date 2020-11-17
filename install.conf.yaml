@@ -6,7 +6,8 @@
 
 - link:
     ~/.dotfiles: ''
-    ~/.gitconfig:
+    ~/.gitconfig: 'gitconfigs/gitconfig'
+    ~/.gitconfigs: 'gitconfigs'
     ~/.oh-my-zsh:
     ~/.profile:
     ~/.zshrc:

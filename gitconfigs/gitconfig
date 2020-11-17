@@ -1,6 +1,11 @@
-[user]
-	name = brisberg
-	email = brandon.risberg@gmail.com
+# User config based on directory
+[include]
+	path = ~/.gitconfigs/git-personal.conf
+[includeIf "gitdir:~/DevProjects/zwei"]
+	path = ~/.gitconfigs/git-private.conf
+[includeIf "gitdir:~/DevProjects/work"]
+	path = ~/.gitconfigs/git-work.conf
+
 [push]
 	default = matching
 [alias]
