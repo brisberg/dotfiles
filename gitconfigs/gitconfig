@@ -1,11 +1,12 @@
 # User config based on directory
-[include]
+[includeIf "gitdir:~/DevProjects/"]
 	path = ~/.gitconfigs/git-personal.conf
-[includeIf "gitdir:~/DevProjects/zwei/"]
+[includeIf "gitdir:~/ZweiProjects/"]
 	path = ~/.gitconfigs/git-private.conf
-[includeIf "gitdir:~/DevProjects/work/"]
+[includeIf "gitdir:~/WorkProjects/work/"]
 	path = ~/.gitconfigs/git-work.conf
 
+# Fallback auth to osxkeychain
 [credential]
   helper = osxkeychain
 	# Forces re-auth for each repo so multiple accounts can be used
