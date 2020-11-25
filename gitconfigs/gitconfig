@@ -14,6 +14,9 @@
 
 [push]
 	default = matching
+[pull]
+	# Default to only fast-forward merges
+	ff = only
 [alias]
   # Return the name of the current branch (used in other aliases)
 	branch-name = "rev-parse --abbrev-ref HEAD"
