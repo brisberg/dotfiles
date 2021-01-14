@@ -126,3 +126,6 @@ if [ -f '/Applications/google-cloud-sdk/completion.zsh.inc' ]; then source '/App
 
 # Golang
 export GOPATH="$HOME/go"
+
+# Launcher for Mac version of Dwarf Fortress
+alias dwarffortress="cd /Applications/df_osx; sudo sh df"
