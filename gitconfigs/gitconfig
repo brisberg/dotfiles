@@ -8,9 +8,9 @@
 
 # Fallback auth to osxkeychain
 [credential]
-  helper = osxkeychain
+	helper = osxkeychain
 	# Forces re-auth for each repo so multiple accounts can be used
-  # useHttpPath = true
+	# useHttpPath = true
 
 [push]
 	default = matching
@@ -18,13 +18,28 @@
 	# Default to only fast-forward merges
 	ff = only
 [alias]
-  # Return the name of the current branch (used in other aliases)
+	# Add all local changes and commit with following message
+	ac = "!git add . && git commit -m"
+	
+	# Return the name of the current branch (used in other aliases)
 	branch-name = "rev-parse --abbrev-ref HEAD"
+
+	# Updates local origin with remote origin state
+	remote-update = "remote update --prune"
+	
+	# Removes all local branches missing from remote origin
+	# From https://youtu.be/mnmYwRoSisg?t=597
+	branch-prune = "!git branch --vv | awk '/: gone]/{print &1}' | xargs git branch -d"
+
 	# Writing a local branch description
 	# from https://stackoverflow.com/a/8858853
-	description = "!git config branch.$(git branch-name).description"
 	reword = branch --edit-description
+	description = "!git config branch.$(git branch-name).description"
 	desc = description
+	
+	# Print commit log as a visual tree graph
+	graph = "log --graph --decorate --oneline"
+	
 	# Toolchain commands for @brisberg repositories
 	toolchain-upgrade = "!git fetch toolchain \
 		$(git ls-remote --tags --refs --sort=\"version:refname\" toolchain \
