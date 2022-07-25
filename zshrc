@@ -129,3 +129,13 @@ export GOPATH="$HOME/go"
 
 # Launcher for Mac version of Dwarf Fortress
 alias dwarffortress="cd /Applications/df_osx; sudo sh df"
+
+# Godot Engine development
+# TODO: might be better to convert the Godot alias int a symlink on the path.
+# See https://godotengine.org/qa/22104/how-to-run-a-project-in-godot-from-command-on-mac
+local GODOT_ENGINE_PATH=$HOME/Library/Application\ Support/Steam/steamapps/common/Godot\ Engine/Godot.app/Contents/MacOS/Godot
+if [[ -f "$GODOT_ENGINE_PATH" ]]; then
+  # echo 'Godot Engine found'
+  alias godot="'$GODOT_ENGINE_PATH'"
+  alias gut='godot --path $PWD -s addons/gut/gut_cmdln.gd'
+fi
