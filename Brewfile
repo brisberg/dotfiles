@@ -26,3 +26,5 @@ brew "python@3.9"
 brew "sphinx-doc"
 # JavaScript package manager
 brew "yarn"
+# Compatibility layer to run Windows applications
+cask "wine-stable"
