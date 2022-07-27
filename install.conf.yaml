@@ -2,15 +2,16 @@
     link:
       relink: true
 
-- clean: ['~']
+- clean: ["~"]
 
 - link:
-    ~/.dotfiles: ''
-    ~/.gitconfig: 'gitconfigs/gitconfig'
-    ~/.gitconfigs: 'gitconfigs'
+    ~/.dotfiles: ""
+    ~/.Brewfile:
+    ~/.gitconfig: "gitconfigs/gitconfig"
+    ~/.gitconfigs: "gitconfigs"
     ~/.oh-my-zsh:
     ~/.profile:
     ~/.zshrc:
 
 - shell:
-  - [git submodule update --init --recursive, Installing submodules]
+    - [git submodule update --init --recursive, Installing submodules]
