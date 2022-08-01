@@ -18,13 +18,9 @@ brew "hugo"
 brew "nghttp2"
 # HTTP(S) server and reverse proxy, and IMAP/POP3 proxy server
 brew "nginx"
-# Platform built on V8 to build network applications
-brew "node"
 # Interpreted, interactive, object-oriented programming language
 brew "python@3.9"
 # Tool to create intelligent and beautiful documentation
 brew "sphinx-doc"
-# JavaScript package manager
-brew "yarn"
 # Compatibility layer to run Windows applications
 cask "wine-stable"
