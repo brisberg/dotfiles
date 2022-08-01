@@ -1,5 +1,5 @@
 # Oh-My-Zsh Installation
-source ~/.dotfiles/zsh/oh-my-zsh.zsh
+source $DOTFILES/zsh/oh-my-zsh.zsh
 
 #### Start Base Zsh Configuration
 # User configuration
@@ -7,8 +7,11 @@ source ~/.dotfiles/zsh/oh-my-zsh.zsh
 ## You may need to manually set your language environment
 export LANG=en_US.UTF-8
 
+## Setup Programing Languages
+source $DOTFILES/zsh/languages.zsh
+
 ## Set user aliases
-source ~/.dotfiles/zsh/aliases.zsh
+source $DOTFILES/zsh/aliases.zsh
 
 ### Unused configs
 # export MANPATH="/usr/local/man:$MANPATH"
@@ -25,12 +28,6 @@ source ~/.dotfiles/zsh/aliases.zsh
 
 # ssh
 # export SSH_KEY_PATH="~/.ssh/rsa_id"
-
-## Python config virtualenv
-export WORKON_HOME=~/.virtualenvs
-
-
-
 
 
 alias gotods="cd $HOME/Library/Application\ Support/Steam/steamapps/common/dont_starve/dontstarve_steam.app/Contents"
@@ -56,9 +53,6 @@ if [ -f '/Applications/google-cloud-sdk/path.zsh.inc' ]; then source '/Applicati
 
 # The next line enables shell command completion for gcloud.
 if [ -f '/Applications/google-cloud-sdk/completion.zsh.inc' ]; then source '/Applications/google-cloud-sdk/completion.zsh.inc'; fi
-
-# Golang
-export GOPATH="$HOME/go"
 
 # Launcher for Mac version of Dwarf Fortress
 alias dwarffortress="cd /Applications/df_osx; sudo sh df"
