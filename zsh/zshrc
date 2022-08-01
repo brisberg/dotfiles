@@ -1,15 +1,17 @@
 # Oh-My-Zsh Installation
 source ~/.dotfiles/zsh/oh-my-zsh.zsh
 
+#### Start Base Zsh Configuration
 # User configuration
 
-## Python config virtualenv
-export WORKON_HOME=~/.virtualenvs
-
-# export MANPATH="/usr/local/man:$MANPATH"
-
-# You may need to manually set your language environment
+## You may need to manually set your language environment
 export LANG=en_US.UTF-8
+
+## Set user aliases
+source ~/.dotfiles/zsh/aliases.zsh
+
+### Unused configs
+# export MANPATH="/usr/local/man:$MANPATH"
 
 # Preferred editor for local and remote sessions
 # if [[ -n $SSH_CONNECTION ]]; then
@@ -24,25 +26,12 @@ export LANG=en_US.UTF-8
 # ssh
 # export SSH_KEY_PATH="~/.ssh/rsa_id"
 
-# Set personal aliases, overriding those provided by oh-my-zsh libs,
-# plugins, and themes. Aliases can be placed here, though oh-my-zsh
-# users are encouraged to define aliases within the ZSH_CUSTOM folder.
-# For a full list of active aliases, run `alias`.
-#
-# Example aliases
-# alias ohmyzsh="mate ~/.oh-my-zsh"
-alias zrc="subl ~/.zshrc"
-alias szrc="source ~/.zshrc"
+## Python config virtualenv
+export WORKON_HOME=~/.virtualenvs
 
-# Git aliases
-alias gs="git status"
-alias gci="git commit"
-alias gcim="git commit -m"
-alias gaa="git add ."
-alias gap="git add -p"
-alias grbc="git rebase --continue"
-alias grba="git rebase --abort"
-alias gl="git log --all --graph --decorate --oneline --simplify-by-decoration"
+
+
+
 
 alias gotods="cd $HOME/Library/Application\ Support/Steam/steamapps/common/dont_starve/dontstarve_steam.app/Contents"
 alias gotodst="cd $HOME/Library/Application\ Support/Steam/steamapps/common/Don\'t\ Starve\ Together/dontstarve_steam.app/Contents"
@@ -83,3 +72,5 @@ if [[ -f "$GODOT_ENGINE_PATH" ]]; then
   alias godot="'$GODOT_ENGINE_PATH'"
   alias gut='godot --path $PWD -s addons/gut/gut_cmdln.gd'
 fi
+
+#### End Base Zsh Configuration
