@@ -8,10 +8,9 @@
     ~/.dotfiles: ""
     ~/.Brewfile:
     ~/.gitconfig: "gitconfigs/gitconfig"
-    ~/.gitconfigs: "gitconfigs"
-    ~/.oh-my-zsh:
     ~/.profile:
-    ~/.zshrc:
+    ~/.zshrc: "zsh/zshrc"
+    # Host specific links
 
 - shell:
     - [git submodule update --init --recursive, Installing submodules]
