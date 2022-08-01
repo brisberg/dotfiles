@@ -13,6 +13,19 @@ source $DOTFILES/zsh/languages.zsh
 ## Set user aliases
 source $DOTFILES/zsh/aliases.zsh
 
+### Load configs for Tools, Projects and Apps
+
+# Gather all source scripts by wildcard and source them
+# See https://stackoverflow.com/a/14973302 for explanation
+typeset -a sources
+sources+=($DOTFILES/zsh/tools/*.zsh)
+sources+=($DOTFILES/zsh/projects/*.zsh)
+sources+=($DOTFILES/zsh/apps/*.zsh)
+
+for f ($^sources(.N)) source $f;
+unset sources
+
+
 ### Unused configs
 # export MANPATH="/usr/local/man:$MANPATH"
 
@@ -28,43 +41,5 @@ source $DOTFILES/zsh/aliases.zsh
 
 # ssh
 # export SSH_KEY_PATH="~/.ssh/rsa_id"
-
-
-alias gotods="cd $HOME/Library/Application\ Support/Steam/steamapps/common/dont_starve/dontstarve_steam.app/Contents"
-alias gotodst="cd $HOME/Library/Application\ Support/Steam/steamapps/common/Don\'t\ Starve\ Together/dontstarve_steam.app/Contents"
-
-# Don't Starve mod syncing
-local MOD_PROJECT_DIR="$HOME/DevProjects"
-local DS_MOD_DIR="$HOME/Library/Application\ Support/Steam/steamapps/common/dont_starve/dontstarve_steam.app/Contents/mods"
-local DST_MOD_DIR="$HOME/Library/Application\ Support/Steam/steamapps/common/Don\'t\ Starve\ Together/dontstarve_steam.app/Contents/mods"
-
-function sync_ds_mod() {
-  rm -rf $DS_MOD_DIR/$1
-  cp -R $MOD_PROJECT_DIR/$1/mod/ $DS_MOD_DIR/$1
-}
-
-function sync_dst_mod() {
-  rm -rf $DST_MOD_DIR/$1
-  cp -R $MOD_PROJECT_DIR/$1/mod/ $DST_MOD_DIR/$1
-}
-
-# The next line updates PATH for the Google Cloud SDK.
-if [ -f '/Applications/google-cloud-sdk/path.zsh.inc' ]; then source '/Applications/google-cloud-sdk/path.zsh.inc'; fi
-
-# The next line enables shell command completion for gcloud.
-if [ -f '/Applications/google-cloud-sdk/completion.zsh.inc' ]; then source '/Applications/google-cloud-sdk/completion.zsh.inc'; fi
-
-# Launcher for Mac version of Dwarf Fortress
-alias dwarffortress="cd /Applications/df_osx; sudo sh df"
-
-# Godot Engine development
-# TODO: might be better to convert the Godot alias int a symlink on the path.
-# See https://godotengine.org/qa/22104/how-to-run-a-project-in-godot-from-command-on-mac
-local GODOT_ENGINE_PATH=$HOME/Library/Application\ Support/Steam/steamapps/common/Godot\ Engine/Godot.app/Contents/MacOS/Godot
-if [[ -f "$GODOT_ENGINE_PATH" ]]; then
-  # echo 'Godot Engine found'
-  alias godot="'$GODOT_ENGINE_PATH'"
-  alias gut='godot --path $PWD -s addons/gut/gut_cmdln.gd'
-fi
 
 #### End Base Zsh Configuration
