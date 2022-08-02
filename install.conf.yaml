@@ -1,5 +1,6 @@
 - defaults:
     link:
+      create: true
       relink: true
 
 - clean: ["~"]
@@ -8,6 +9,8 @@
     ~/.dotfiles: ""
     ~/.Brewfile:
     ~/.gitconfig: "gitconfigs/gitconfig"
+    ~/DevProjects/.git-personal.conf: "gitconfigs/git-personal.conf"
+    ~/WorkProjects/work/.git-work.conf: "gitconfigs/git-work.conf"
     ~/.zprofile: "zsh/zprofile"
     ~/.zshrc: "zsh/zshrc"
     # Host specific links
