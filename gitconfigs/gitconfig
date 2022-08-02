@@ -57,5 +57,5 @@
 	# Forces re-auth for each repo so multiple accounts can be used
 	# useHttpPath = true
 [user]
-	name = Brandon Risberg
+	name = brisberg
 	email = brandon.risberg@gmail.com
