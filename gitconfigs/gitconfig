@@ -1,4 +1,20 @@
-# Base git config options for all profiles
+# See https://github.com/brisberg/dotfiles/issues/2
+# Override values need to be specified first, with the base values specified last.
+
+# Private configuration overrides
+# Useful for sensitive configuration or credentials which should be version controlled.
+# User must create the appropriate file at `~/.git-private.conf`
+[include]
+	path = ~/.git-private.conf
+
+## User config overrides based on directory
+[includeIf "gitdir:~/DevProjects/"]
+	path = ~/.gitconfigs/git-personal.conf
+[includeIf "gitdir:~/WorkProjects/work/"]
+	path = ~/.gitconfigs/git-work.conf
+
+
+## Base git config options for all profiles
 [push]
 	default = matching
 [pull]
@@ -43,15 +59,3 @@
 [user]
 	name = Brandon Risberg
 	email = brandon.risberg@gmail.com
-
-# User config based on directory
-[includeIf "gitdir:~/DevProjects/"]
-	path = ~/.gitconfigs/git-personal.conf
-[includeIf "gitdir:~/WorkProjects/work/"]
-	path = ~/.gitconfigs/git-work.conf
-
-# Private configuration overrides
-# Useful for sensitive configuration or credentials which should be version controlled.
-# User must create the appropriate file at `~/.git-private.conf`
-[include]
-	path = ~/.git-private.conf
