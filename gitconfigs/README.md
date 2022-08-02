@@ -10,4 +10,4 @@ See blog post for explanation.
 
 ## Private Settings
 
-For sensitive configurations not appropriate for committing to version control, the base config will include `~/git-private.conf`. It is up to the user to setup this script as appropriate for the host environment.
+For sensitive configurations not appropriate for committing to version control, the base config will include `~/.git-private.conf`. It is up to the user to setup this script as appropriate for the host environment.

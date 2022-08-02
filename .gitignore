@@ -2,3 +2,6 @@
 # See https://github.com/Homebrew/homebrew-bundle/pull/552
 # I've decided to not include it due to conflicts with lock files on other hosts
 Brewfile.lock.json
+
+# Private credentials / configs
+**/git-private.conf
