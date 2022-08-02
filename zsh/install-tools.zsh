@@ -15,8 +15,8 @@ fi
 # See https://stackoverflow.com/a/14973302 for explanation
 typeset -a sources
 sources+=($DOTFILES/zsh/tools/*.zsh)
-sources+=($DOTFILES/zsh/projects/*.zsh)
-sources+=($DOTFILES/zsh/apps/*.zsh)
+# sources+=($DOTFILES/zsh/projects/*.zsh)
+# sources+=($DOTFILES/zsh/apps/*.zsh)
 
 for f ($^sources(.N)) source $f;
 unset sources
