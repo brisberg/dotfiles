@@ -9,9 +9,9 @@
 
 ## User config overrides based on directory
 [includeIf "gitdir:~/DevProjects/"]
-	path = ~/.gitconfigs/git-personal.conf
+	path = ~/DevProjects/git-personal.conf
 [includeIf "gitdir:~/WorkProjects/work/"]
-	path = ~/.gitconfigs/git-work.conf
+	path = ~/WorkProjects/work/git-work.conf
 
 
 ## Base git config options for all profiles
