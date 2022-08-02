@@ -2,6 +2,8 @@
 
 Personal dotfile repository
 
+Uses [Dotbot](https://github.com/anishathalye/dotbot) to manage and version `.dotfiles`.
+
 ### Install
 
 Clean install:
