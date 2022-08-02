@@ -22,5 +22,7 @@ brew "nginx"
 brew "python@3.9"
 # Tool to create intelligent and beautiful documentation
 brew "sphinx-doc"
+# Set of tools to manage resources and applications hosted on Google Cloud
+cask "google-cloud-sdk"
 # Compatibility layer to run Windows applications
 cask "wine-stable"

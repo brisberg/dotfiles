@@ -14,16 +14,8 @@ source $DOTFILES/zsh/languages.zsh
 source $DOTFILES/zsh/aliases.zsh
 
 ### Load configs for Tools, Projects and Apps
-
-# Gather all source scripts by wildcard and source them
-# See https://stackoverflow.com/a/14973302 for explanation
-typeset -a sources
-sources+=($DOTFILES/zsh/tools/*.zsh)
-sources+=($DOTFILES/zsh/projects/*.zsh)
-sources+=($DOTFILES/zsh/apps/*.zsh)
-
-for f ($^sources(.N)) source $f;
-unset sources
+# Pass false to avoid reinstalling tools which slow shell startup
+source $DOTFILES/zsh/install-tools.zsh false
 
 
 ### Unused configs
