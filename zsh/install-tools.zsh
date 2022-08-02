@@ -11,6 +11,12 @@ else
   export INSTALL_TOOLS=false
 fi
 
+# Local modification to use Homebrew
+if [[ INSTALL_TOOLS = 'true' ]]; then
+  echo "Installing Homebrew modules..."
+  brew bundle;
+fi
+
 # Gather all source scripts by wildcard and source them
 # See https://stackoverflow.com/a/14973302 for explanation
 typeset -a sources
