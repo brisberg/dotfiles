@@ -41,6 +41,10 @@
 [user]
 	name = brisberg
 	email = brandon.risberg@gmail.com
+[credential]
+    helper = store --file ~/.git-creds/brisberg
+	username = brisberg
+
 
 # Private configuration overrides
 # Useful for sensitive configuration or credentials which should be version controlled.
