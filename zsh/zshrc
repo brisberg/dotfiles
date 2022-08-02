@@ -1,4 +1,4 @@
-# Oh-My-Zsh Installation
+## Oh-My-Zsh Installation
 source $DOTFILES/zsh/oh-my-zsh.zsh
 
 #### Start Base Zsh Configuration
@@ -16,6 +16,14 @@ source $DOTFILES/zsh/aliases.zsh
 ### Load configs for Tools, Projects and Apps
 # Pass false to avoid reinstalling tools which slow shell startup
 source $DOTFILES/zsh/install-tools.zsh false
+
+
+## Private Zsh configuration
+# Source sensitive configuration from `~/.zshrc-private`
+# This file is not tracker and must be provided by the user on each host.
+if [[ -f ~/.zshrc-private ]]; then
+  source ~/.zshrc-private
+fi
 
 
 ### Unused configs

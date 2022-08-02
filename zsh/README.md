@@ -59,3 +59,7 @@ fi
 omz plugin load foobar-cli
 alias foobar=/path/to/foobar-cli
 ```
+
+### Private Configuration
+
+Sensitive credentials or private configs not suitable for commitment to version control can be placed at `~/.zshrc-private`. It will be sourced at the end of the standard `zshrc`. This file must be provided by the user for each host.
