@@ -1,3 +1,11 @@
+### Start Cerberus-PC@WSL modification
+
+# Copied from zprofile as invoking Zsh on WSL doesn't count as a login shell
+export DOTFILES=$HOME/.dotfiles
+export HOST_SHORT="$(hostname -s)"
+
+### End Cerberus-PC@WSL modification
+
 ## Oh-My-Zsh Installation
 source $DOTFILES/zsh/oh-my-zsh.zsh
 
@@ -43,3 +51,9 @@ fi
 # export SSH_KEY_PATH="~/.ssh/rsa_id"
 
 #### End Base Zsh Configuration
+
+#### Start Cerberus-PC@WSL configurations
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion

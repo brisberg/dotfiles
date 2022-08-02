@@ -38,10 +38,6 @@
 
 # Fallback auth to osxkeychain and default GitHub account
 # Note this will not be able to access private repos on subsidiary accounts
-[credential]
-	helper = osxkeychain
-	# Forces re-auth for each repo so multiple accounts can be used
-	# useHttpPath = true
 [user]
 	name = brisberg
 	email = brandon.risberg@gmail.com
