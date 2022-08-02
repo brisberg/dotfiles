@@ -2,12 +2,13 @@
 # Google Cloud SDK configs
 # https://cloud.google.com/sdk
 
-# TODO: Test replacing these lines with the OMZ plugin
-# https://github.com/ohmyzsh/ohmyzsh/blob/master/plugins/gcloud/gcloud.plugin.zsh
-## omz plugin load gcloud
+if [[ INSTALL_TOOLS = 'true' ]]; then
+  if (( ${+commands[brew]} )); then
+    brew install -q google-cloud-sdk
+  else
+    print "Google Cloud SDK could not install. Please install Homebrew."
+  fi
+fi
 
-# The next line updates PATH for the Google Cloud SDK.
-if [ -f '/Applications/google-cloud-sdk/path.zsh.inc' ]; then source '/Applications/google-cloud-sdk/path.zsh.inc'; fi
-
-# The next line enables shell command completion for gcloud.
-if [ -f '/Applications/google-cloud-sdk/completion.zsh.inc' ]; then source '/Applications/google-cloud-sdk/completion.zsh.inc'; fi
+# Enable OhMyZsh plugin to enable completions
+omz plugin load gcloud

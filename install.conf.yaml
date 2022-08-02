@@ -14,4 +14,4 @@
 
 - shell:
     - [git submodule update --init --recursive, Installing submodules]
-    - [brew bundle, Installing Homebrew modules] # Update Homebrew and install from Brewfile
+    - [zsh/install-tools.zsh true, Installing and Updating Tools]
