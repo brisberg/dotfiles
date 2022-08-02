@@ -22,6 +22,8 @@
 	ff = only
 
 [alias]
+	st = "status"
+
 	# Add all local changes and commit with following message
 	ac = "!git add . && git commit -m"
 
