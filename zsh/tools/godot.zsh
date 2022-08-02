@@ -6,7 +6,7 @@
 # See https://godotengine.org/qa/22104/how-to-run-a-project-in-godot-from-command-on-mac
 
 # Absolute path to Godot installation
-local GODOT_ENGINE_PATH=$HOME/path/to/godot/engine
+local GODOT_ENGINE_PATH=$HOME/Library/Application\ Support/Steam/steamapps/common/Godot\ Engine/Godot.app/Contents/MacOS/Godot
 
 if [[ -f "$GODOT_ENGINE_PATH" ]]; then
   # echo 'Godot Engine found'
