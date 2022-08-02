@@ -7,6 +7,7 @@
 # For a full list of active aliases, run `alias`.
 #
 # Example aliases
+alias dotfiles-install="sh $DOTFILES/install"
 alias zrc="subl ~/.zshrc"
 alias szrc="source ~/.zshrc"
 
