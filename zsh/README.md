@@ -14,9 +14,10 @@ It is installed a submodule in this repo and used heavily for maintaining useful
 
 My Zsh setup exports the following Environment Variables:
 
-| Name     | Example Value | Purpose                                           |
-| -------- | ------------- | ------------------------------------------------- |
-| DOTFILES | ~/.dotfiles   | Absolute directory root for dotfile installation. |
+| Name       | Example Value | Purpose                                           |
+| ---------- | ------------- | ------------------------------------------------- |
+| DOTFILES   | ~/.dotfiles   | Absolute directory root for dotfile installation. |
+| HOST_SHORT | angler        | Shortened Hostname used to identify this machine. |
 
 ## File Structure
 
