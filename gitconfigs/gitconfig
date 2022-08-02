@@ -1,26 +1,10 @@
-# User config based on directory
-[includeIf "gitdir:~/DevProjects/"]
-	path = ~/.gitconfigs/git-personal.conf
-[includeIf "gitdir:~/ZweiProjects/"]
-	path = ~/.gitconfigs/git-private.conf
-[includeIf "gitdir:~/WorkProjects/work/"]
-	path = ~/.gitconfigs/git-work.conf
-
-# Fallback auth to osxkeychain and default GitHub account
-# Note this will not be able to access private repos on subsidiary accounts
-[credential]
-	helper = osxkeychain
-	# Forces re-auth for each repo so multiple accounts can be used
-	# useHttpPath = true
-[user]
-	name = Brandon Risberg
-	email = brandon.risberg@gmail.com
-
+# Base git config options for all profiles
 [push]
 	default = matching
 [pull]
 	# Default to only fast-forward merges
 	ff = only
+
 [alias]
 	# Add all local changes and commit with following message
 	ac = "!git add . && git commit -m"
@@ -49,3 +33,25 @@
 		$(git ls-remote --tags --refs --sort=\"version:refname\" toolchain \
 		| awk -F/ 'END{print$NF}') \
 		&& git merge FETCH_HEAD"
+
+# Private configuration overrides
+# Useful for sensitive configuration or credentials which should be version controlled.
+# User must create the appropriate file at `~/.git-private.conf`
+[include]
+	path = ~/.git-private.conf
+
+# Fallback auth to osxkeychain and default GitHub account
+# Note this will not be able to access private repos on subsidiary accounts
+[credential]
+	helper = osxkeychain
+	# Forces re-auth for each repo so multiple accounts can be used
+	# useHttpPath = true
+[user]
+	name = Brandon Risberg
+	email = brandon.risberg@gmail.com
+
+# User config based on directory
+[includeIf "gitdir:~/DevProjects/"]
+	path = ~/.gitconfigs/git-personal.conf
+[includeIf "gitdir:~/WorkProjects/work/"]
+	path = ~/.gitconfigs/git-work.conf
