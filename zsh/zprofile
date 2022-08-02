@@ -3,6 +3,7 @@
 # Set user specific environment variables here
 
 export DOTFILES=$HOME/.dotfiles
+export HOST_SHORT="$(hostname -s)"
 
 
 # TODO: The following lines should be moved or restructured

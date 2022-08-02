@@ -7,7 +7,7 @@
 # For a full list of active aliases, run `alias`.
 
 # Dotfiles
-alias dotfiles-install="(cd $DOTFILES; git pull -r; sh $DOTFILES/install)"
+alias dotfiles-install="(cd $DOTFILES; git checkout $HOST_SHORT; git pull -r; sh $DOTFILES/install)"
 
 # Git aliases
 alias gs="git status"
