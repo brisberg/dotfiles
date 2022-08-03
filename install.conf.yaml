@@ -12,6 +12,7 @@
     ~/DevProjects/.git-personal.conf: "gitconfigs/git-personal.conf"
     ~/WorkProjects/work/.git-work.conf: "gitconfigs/git-work.conf"
     ~/.zprofile: "zsh/zprofile"
+    ~/.zshenv: "zsh/zshenv"
     ~/.zshrc: "zsh/zshrc"
     # Host specific links
 
