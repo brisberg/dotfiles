@@ -45,7 +45,6 @@
     helper = store --file ~/.git-creds/brisberg
 	username = brisberg
 
-
 # Private configuration overrides
 # Useful for sensitive configuration or credentials which should be version controlled.
 # User must create the appropriate file at `~/.git-private.conf`
