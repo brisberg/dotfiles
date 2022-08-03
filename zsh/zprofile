@@ -2,10 +2,6 @@
 # zProfile is loaded for login shells before .zshrc
 # Set user specific environment variables here
 
-export DOTFILES=$HOME/.dotfiles
-export HOST_SHORT="$(hostname -s)"
-
-
 # TODO: The following lines should be moved or restructured
 export PATH=$PATH:/Applications/Postgres.app/Contents/Versions/9.5/bin
 export PATH=$PATH:/Applications/Sublime\ Text.app/Contents/SharedSupport/bin

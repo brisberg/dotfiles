@@ -1,0 +1,6 @@
+# See https://zsh.sourceforge.io/Intro/intro_3.html#SEC3
+# zshenv is loaded for all shells before .zshrc (even non-interactive)
+# Set important environment variables here used by all other scripts
+
+export DOTFILES=$HOME/.dotfiles
+export HOST_SHORT="$(hostname -s)"
