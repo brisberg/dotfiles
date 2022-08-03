@@ -21,4 +21,7 @@
 
 - shell:
     - [git submodule update --init --recursive, Installing submodules]
-    - [zsh/install-tools.zsh true, Installing and Updating Tools]
+    - command: zsh/install-tools.zsh true
+      description: Installing and Updating Tools]
+      stdout: true
+      stderr: true
