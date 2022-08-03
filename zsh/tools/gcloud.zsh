@@ -2,7 +2,7 @@
 # Google Cloud SDK configs
 # https://cloud.google.com/sdk
 
-if [[ INSTALL_TOOLS = 'true' ]]; then
+if [ $INSTALL_TOOLS = true ]; then
   if (( ${+commands[brew]} )); then
     brew install -q google-cloud-sdk
   else
@@ -11,4 +11,6 @@ if [[ INSTALL_TOOLS = 'true' ]]; then
 fi
 
 # Enable OhMyZsh plugin to enable completions
-omz plugin load gcloud
+if (( $+commands[omz] )); then
+  omz plugin load gcloud
+fi
