@@ -54,6 +54,6 @@
 
 ## User config overrides based on directory
 [includeIf "gitdir:~/DevProjects/"]
-	path = ~/DevProjects/git-personal.conf
+	path = ~/DevProjects/.git-personal.conf
 [includeIf "gitdir:~/WorkProjects/work/"]
-	path = ~/WorkProjects/work/git-work.conf
+	path = ~/WorkProjects/work/.git-work.conf
