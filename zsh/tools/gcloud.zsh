@@ -2,7 +2,7 @@
 # Google Cloud SDK configs
 # https://cloud.google.com/sdk
 
-if [ $INSTALL_TOOLS = true ]; then
+if [[ $INSTALL_TOOLS = true ]]; then
   if (( ${+commands[brew]} )); then
     brew install -q google-cloud-sdk
   else
