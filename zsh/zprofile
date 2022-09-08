@@ -2,8 +2,8 @@
 # zProfile is loaded for login shells before .zshrc
 # Set user specific environment variables here
 
-# Add home directory bin to path
-export PATH=$PATH:~/bin
+# Add personal bin dir to path
+export PATH=$PATH:$HOME/bin
 
 # TODO: Move this somewhere else (possibly tools) instead of profile
 export NVM_DIR="$HOME/.nvm"
