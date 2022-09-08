@@ -2,9 +2,9 @@
 # zProfile is loaded for login shells before .zshrc
 # Set user specific environment variables here
 
-# TODO: The following lines should be moved or restructured
-export PATH=$PATH:/Applications/Postgres.app/Contents/Versions/9.5/bin
-export PATH=$PATH:/Applications/Sublime\ Text.app/Contents/SharedSupport/bin
+# Add home directory bin to path
+export PATH=$PATH:~/bin
 
+# TODO: Move this somewhere else (possibly tools) instead of profile
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
