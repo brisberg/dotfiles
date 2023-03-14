@@ -1,28 +1,27 @@
 tap "homebrew/bundle"
 tap "homebrew/cask"
 tap "homebrew/core"
-tap "nektos/tap"
-# Run your GitHub Actions locally 🚀
-brew "act"
+
+## Languages
+# Interpreted, interactive, object-oriented programming language
+brew "python@3.11"
+
+## Tools
 # Official Amazon AWS command-line interface
 brew "awscli"
-# Formatting tools for C, C++, Obj-C, Java, JavaScript, TypeScript
-brew "clang-format"
 # Distributed revision control system
 brew "git"
 # Small git utilities
 brew "git-extras"
+# Formatting tools for C, C++, Obj-C, Java, JavaScript, TypeScript
+brew "clang-format"
 # Configurable static site generator
 brew "hugo"
-# HTTP/2 C Library
-brew "nghttp2"
-# HTTP(S) server and reverse proxy, and IMAP/POP3 proxy server
-brew "nginx"
-# Interpreted, interactive, object-oriented programming language
-brew "python@3.9"
-# Tool to create intelligent and beautiful documentation
-brew "sphinx-doc"
+
+## Casks
+# Web browser
+cask "google-chrome"
+# Password manager that keeps all passwords secure behind one password
+cask "1password"
 # Set of tools to manage resources and applications hosted on Google Cloud
 cask "google-cloud-sdk"
-# Compatibility layer to run Windows applications
-cask "wine-stable"
