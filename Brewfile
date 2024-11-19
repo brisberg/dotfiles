@@ -29,3 +29,5 @@ cask "google-chrome"
 cask "1password"
 # Set of tools to manage resources and applications hosted on Google Cloud
 cask "google-cloud-sdk"
+# Knowledge base and Markdown file editor 
+cask "obsidian"
