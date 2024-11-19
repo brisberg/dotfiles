@@ -3,8 +3,8 @@
 # Set user specific environment variables here
 
 # TODO: The following lines should be moved or restructured
-export PATH=$PATH:/Applications/Postgres.app/Contents/Versions/9.5/bin
-export PATH=$PATH:/Applications/Sublime\ Text.app/Contents/SharedSupport/bin
+# export PATH=$PATH:/Applications/Postgres.app/Contents/Versions/9.5/bin
+# export PATH=$PATH:/Applications/Sublime\ Text.app/Contents/SharedSupport/bin
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm

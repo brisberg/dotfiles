@@ -1,4 +1,4 @@
-# Sourced from .zshrc
+# Sourced from zsh/install-tools.zsh
 # Google Cloud SDK configs
 # https://cloud.google.com/sdk
 
