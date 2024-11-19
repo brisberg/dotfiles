@@ -27,7 +27,7 @@ TOKEN=$1 # must have admin:public_key for DELETE
 ssh-keygen -q -b 4096 -t rsa -N "" -f ~/.ssh/github_rsa
 
 PUBKEY=`cat ~/.ssh/github_rsa.pub`
-TITLE=$(hostname)-${OSTYPE//[0-9.]/}
+TITLE=$(hostname -s)-${OSTYPE//[0-9.]/}
 
 RESPONSE=`curl -s -H "Authorization: token ${TOKEN}" \
   -X POST --data-binary "{\"title\":\"${TITLE}\",\"key\":\"${PUBKEY}\"}" \
