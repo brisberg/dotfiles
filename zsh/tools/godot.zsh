@@ -1,4 +1,4 @@
-# Sourced from .zshrc
+# Sourced from zsh/install-tools.zsh
 # Godot Game Engine development configs
 # https://godotengine.org/
 
