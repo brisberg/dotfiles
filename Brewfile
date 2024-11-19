@@ -19,6 +19,10 @@ brew "clang-format"
 brew "hugo"
 
 ## Casks
+# Terminal Emulator
+cask "iterm2"
+# IDE / text editor
+cask "visual-studio-code"
 # Web browser
 cask "google-chrome"
 # Password manager that keeps all passwords secure behind one password
