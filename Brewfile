@@ -31,3 +31,5 @@ cask "google-cloud-sdk"
 cask "obsidian"
 # Video conference software
 cask "zoom"
+# Voice / Text chat client
+cask "discord"
