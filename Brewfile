@@ -29,3 +29,5 @@ cask "1password"
 cask "google-cloud-sdk"
 # Knowledge base and Markdown file editor 
 cask "obsidian"
+# Video conference software
+cask "zoom"
