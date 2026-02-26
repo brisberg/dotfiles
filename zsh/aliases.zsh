@@ -9,6 +9,10 @@
 # Dotfiles
 alias dotfiles-install="(cd $DOTFILES; git checkout $HOST_SHORT; git pull -r; sh $DOTFILES/install)"
 
+# Custom Homebrew Installation
+# Other users will proxy 'brew' commands to be performed by the local 'homebrew' user
+alias brew="sudo -Hu homebrew brew"
+
 # Git aliases
 alias gs="git status"
 alias gci="git commit"
