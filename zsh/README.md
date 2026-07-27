@@ -50,7 +50,7 @@ Generally Tool Scripts will have this structure:
 
 # Conditionally,  Update or install tool. This may be slow if it requires a network lookup or file download.
 # Should not through any errors if the program is already installed.
-if [ $INSTALL_TOOLS = true ]; then
+if [[ $INSTALL_TOOLS = true ]]; then
   brew install -q foobar
 fi
 

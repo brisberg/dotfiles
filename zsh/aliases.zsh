@@ -10,6 +10,7 @@
 alias dotfiles-install="(cd $DOTFILES; git checkout $HOST_SHORT; git pull -r; sh $DOTFILES/install)"
 
 # Git aliases
+# TODO(brisberg): Possibly remove these if they conflict with omz/git plugin. Document that somewhere
 alias gs="git status"
 alias gci="git commit"
 alias gcim="git commit -m"
@@ -18,3 +19,7 @@ alias gap="git add -p"
 alias grbc="git rebase --continue"
 alias grba="git rebase --abort"
 alias gl="git log --all --graph --decorate --oneline --simplify-by-decoration"
+
+# Standard Shell Environment aliases
+alias path-pretty-print='echo "$PATH" | tr ":" "\n"'
+alias ppath=path-pretty-print
