@@ -15,9 +15,10 @@
     ~/.zshenv: "zsh/zshenv"
     ~/.zshrc: "zsh/zshrc"
     # Host specific links
-    ~/.bashrc: "wsl/bashrc"
-    ~/.bash_profile: "wsl/bash_profile"
-    ~/.bash_logout: "wsl/bash_logout"
+    ## For Cerberus-PC
+    # ~/.bashrc: "wsl/bashrc"
+    # ~/.bash_profile: "wsl/bash_profile"
+    # ~/.bash_logout: "wsl/bash_logout"
 
 - shell:
     - [git submodule update --init --recursive, Installing submodules]
