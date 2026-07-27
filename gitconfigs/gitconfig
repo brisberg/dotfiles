@@ -57,3 +57,5 @@
 	path = ~/DevProjects/.git-personal.conf
 [includeIf "gitdir:~/WorkProjects/work/"]
 	path = ~/WorkProjects/work/.git-work.conf
+[core]
+	autocrlf = input
