@@ -55,6 +55,8 @@
 ## User config overrides based on directory
 [includeIf "gitdir:~/DevProjects/"]
 	path = ~/DevProjects/.git-personal.conf
+# Host-local override, provided by the user per host and never tracked here.
+# Git silently ignores this include when the file is absent.
 [includeIf "gitdir:~/WorkProjects/work/"]
 	path = ~/WorkProjects/work/.git-work.conf
 [core]
