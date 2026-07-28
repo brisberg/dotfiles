@@ -7,6 +7,8 @@ brew "python@3.11"
 ## Tools
 # Official Amazon AWS command-line interface
 brew "awscli"
+# Manages dotfiles across multiple machines
+brew "chezmoi"
 # Official CLI for interacting with Firebase
 brew "firebase-cli"
 # Distributed revision control system
