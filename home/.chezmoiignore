@@ -1,0 +1,10 @@
+{{- /*
+Files excluded from the target state, evaluated per host.
+
+This is how a whole file disappears on a host that should not have it, rather
+than rendering to something empty or commented out.
+*/ -}}
+{{ if ne (index .hosts .hostID).class "macos" -}}
+# Homebrew is macOS-only here. A Linux/WSL host gets no ~/.Brewfile at all.
+.Brewfile
+{{ end -}}

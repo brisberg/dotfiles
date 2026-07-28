@@ -1,0 +1,82 @@
+#!/bin/sh
+# Package provisioning.
+#
+# `run_onchange_` means chezmoi re-runs this only when the rendered text of this
+# script changes. The package lists are embedded below precisely so that editing
+# them is what triggers a reinstall; a steady-state `chezmoi apply` does not run
+# this at all.
+#
+# `_after_` rather than `_before_`: the macOS path reads ~/.Brewfile, which
+# chezmoi has not written yet during the before phase.
+#
+# CAVEAT: chezmoi records this script as run whenever it exits 0, including when
+# it exits early having done nothing. Do not add an opt-in guard that returns 0
+# up front — the state would be recorded and the script would then never run
+# again for that content.
+
+set -eu
+
+{{ if eq (index .hosts .hostID).class "macos" -}}
+# Re-run when the rendered Brewfile changes:
+# Brewfile sha256: {{ includeTemplate "dot_Brewfile.tmpl" . | sha256sum }}
+
+if ! command -v brew >/dev/null 2>&1; then
+  echo "Homebrew not found — skipping package install." >&2
+  echo "Install Homebrew first, then re-run: chezmoi apply --force" >&2
+  exit 0
+fi
+
+# The interactive `brew` alias proxies through a dedicated `homebrew` user so
+# that several admin users can share one installation. That alias is a shell
+# alias and does not exist here. Nor should it: `sudo -Hu homebrew` needs a
+# password, which would block a non-interactive apply, and -H resets $HOME,
+# which would make --global read the wrong Brewfile entirely. Running as the
+# invoking user works because the Cellar is group-writable by admin.
+echo "Installing Homebrew packages from ~/.Brewfile ..."
+if ! brew bundle install --global --no-upgrade; then
+  cat >&2 <<'GUIDANCE'
+
+brew bundle failed.
+
+On the first run against a machine that was set up by hand, the usual cause is
+casks whose applications already exist in /Applications but were installed
+manually, so Homebrew will not overwrite them. Have Homebrew adopt them:
+
+    HOMEBREW_CASK_OPTS=--adopt brew bundle install --global --no-upgrade
+
+Then re-run `chezmoi apply`.
+GUIDANCE
+  exit 1
+fi
+# Exiting non-zero above is deliberate: chezmoi only records a script as having
+# run when it succeeds, so a failure here is retried on the next apply rather
+# than silently skipped forever.
+
+{{ else -}}
+# Re-run when this list changes:
+# apt packages: {{ .packages.apt | sortAlpha | join " " }}
+
+if ! command -v apt-get >/dev/null 2>&1; then
+  echo "apt-get not found — skipping package install." >&2
+  exit 0
+fi
+
+# Determine what is actually missing before touching sudo, so an already
+# provisioned host never triggers a password prompt during apply.
+missing=""
+for pkg in {{ .packages.apt | sortAlpha | join " " }}; do
+  if ! dpkg-query -W -f='${Status}' "$pkg" 2>/dev/null | grep -q "install ok installed"; then
+    missing="$missing $pkg"
+  fi
+done
+
+if [ -z "$missing" ]; then
+  echo "All apt packages already installed."
+  exit 0
+fi
+
+echo "Installing missing apt packages:$missing"
+sudo apt-get update -qq
+# shellcheck disable=SC2086
+sudo apt-get install -y $missing
+{{ end -}}
