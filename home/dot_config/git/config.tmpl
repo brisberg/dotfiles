@@ -1,0 +1,85 @@
+{{- $class := (index .hosts .hostID).class -}}
+# Git configuration.
+#
+# IMPORTANT: git reads this file ONLY when ~/.gitconfig does not exist. If a
+# stale ~/.gitconfig is left behind — for example the symlink the previous
+# Dotbot setup created — this entire file is silently ignored and nothing
+# appears to be wrong. Removing it is part of cutover.
+#
+# Identity is rendered per user from that user's own local chezmoi config, which
+# is how two admin users on one machine share this repo while keeping separate
+# credentials.
+
+[user]
+	name = {{ .gitName | quote }}
+	email = {{ .gitEmail | quote }}
+
+[push]
+	default = matching
+[pull]
+	# Default to only fast-forward merges
+	ff = only
+[core]
+	autocrlf = input
+
+[credential]
+{{ if eq $class "macos" -}}
+	helper = osxkeychain
+{{- else }}
+	# Plain-text storage in ~/.git-credentials. The previous setup wrote to
+	# ~/.git-creds/<user>, which required creating that directory first; the
+	# default path is already per-user because $HOME is.
+	helper = store
+{{- end }}
+
+[alias]
+	st = "status"
+
+	# Add all local changes and commit with following message
+	ac = "!git add . && git commit -m"
+
+	# Return the name of the current branch (used in other aliases)
+	branch-name = "rev-parse --abbrev-ref HEAD"
+
+	# Updates local origin with remote origin state
+	remote-update = "remote update --prune"
+
+	# Removes all local branches missing from remote origin
+	# From https://youtu.be/mnmYwRoSisg?t=597
+	# Previously carried two bugs that made it fail outright: `--vv` is not a
+	# valid option (only `-vv` is), and `print &1` should be `print $1`.
+	branch-prune = "!git branch -vv | awk '/: gone]/{print $1}' | xargs git branch -d"
+
+	# Writing a local branch description
+	# from https://stackoverflow.com/a/8858853
+	reword = branch --edit-description
+	description = "!git config branch.$(git branch-name).description"
+	desc = description
+
+	# Print commit log as a visual tree graph
+	graph = "log --graph --decorate --oneline"
+
+	# Toolchain commands for @brisberg repositories
+	toolchain-upgrade = "!git fetch toolchain \
+		$(git ls-remote --tags --refs --sort=\"version:refname\" toolchain \
+		| awk -F/ 'END{print$NF}') \
+		&& git merge FETCH_HEAD"
+
+## Directory-scoped identity.
+# The target is host-local and untracked. Git silently ignores an includeIf
+# whose file does not exist, so a host that does not need this needs no
+# configuration at all.
+[includeIf "gitdir:~/WorkProjects/work/"]
+	path = ~/WorkProjects/work/.git-work.conf
+
+## Host-local overrides, loaded last so they win.
+# Not managed by chezmoi and never published. Anything may go here, including
+# further includeIf rules.
+[include]
+	path = ~/.config/git/local.conf
+
+# DEPRECATED: the previous private-config seam, superseded by local.conf above.
+# Retained so no host silently loses configuration mid-migration. Remove at
+# Stage 11.
+[include]
+	path = ~/.git-private.conf

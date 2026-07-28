@@ -1,0 +1,20 @@
+# ssh client configuration.
+#
+# ssh takes the FIRST value it finds for each keyword, so this Include has to
+# stay at the top: anything dropped into config.d then takes precedence over the
+# defaults below. IdentityFile is the exception — multiple entries accumulate
+# rather than override, so drop-ins add keys to the list instead of replacing
+# it, which is what a second identity wants.
+#
+# config.d is not managed by chezmoi. A missing or empty directory is fine: a
+# glob matching nothing is not an error.
+Include ~/.ssh/config.d/*
+
+Host github.com
+  User git
+  # Per-user by construction — each user has their own key at this path inside
+  # their own home directory, so no templating is needed.
+  #
+  # This block was previously appended to ~/.ssh/config by zsh/tools/github.zsh
+  # on every single shell start, guarded only by a grep.
+  IdentityFile ~/.ssh/github_rsa
