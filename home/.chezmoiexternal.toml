@@ -1,0 +1,26 @@
+# External dependencies, fetched by chezmoi rather than vendored as git
+# submodules.
+#
+# Submodules were a poor fit here. They pin an exact commit that has to be
+# bumped by hand, they require `git submodule update --init` before anything
+# works, and when that step is missed the failure surfaces as a confusing
+# "no such file or directory" at shell startup rather than as anything
+# actionable. This repo was in precisely that state: the oh-my-zsh submodule was
+# never initialised, so every single shell start printed an error and the
+# framework silently did not load.
+#
+# Paths are relative to the destination directory, i.e. $HOME.
+
+[".local/share/oh-my-zsh"]
+    type = "git-repo"
+    url = "https://github.com/ohmyzsh/ohmyzsh.git"
+    # chezmoi owns updates on this schedule. oh-my-zsh's own auto-updater is
+    # disabled in conf.d/10-omz.zsh so that two things are not pulling the same
+    # checkout behind each other's backs.
+    refreshPeriod = "168h"
+    [".local/share/oh-my-zsh".clone]
+        # Shallow: this is a vendored framework, not something whose history is
+        # ever read. Keeps first-time provisioning on a new host fast.
+        args = ["--depth=1"]
+    [".local/share/oh-my-zsh".pull]
+        args = ["--ff-only"]
