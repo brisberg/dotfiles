@@ -1,0 +1,27 @@
+#!/bin/sh
+# Enable this repository's tracked git hooks after an apply.
+#
+# Without this the pre-commit check is inert until someone remembers to run the
+# installer, which rather defeats a guard whose whole job is to catch the thing
+# you did not mean to do. Running it here means a fresh clone is protected from
+# the first apply onward.
+#
+# This touches the git config of the chezmoi source repository itself, not
+# anything in $HOME. It is idempotent.
+
+set -eu
+
+repo={{ .chezmoi.sourceDir | dir | quote }}
+
+# `| dir` strips the .chezmoiroot component to get the repository root. If the
+# source is not a git checkout — someone copied the files, or is running from an
+# archive — there is nothing to configure and that is fine.
+if [ ! -d "$repo/.git" ]; then
+  exit 0
+fi
+
+if [ ! -x "$repo/scripts/install-hooks.sh" ]; then
+  exit 0
+fi
+
+"$repo/scripts/install-hooks.sh"

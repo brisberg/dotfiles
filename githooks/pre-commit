@@ -1,0 +1,10 @@
+#!/bin/sh
+# Tracked git hooks for this repository.
+#
+# Enabled by `git config core.hooksPath githooks`, which ./scripts/install-hooks.sh
+# does. The chezmoi script .chezmoiscripts/run_onchange_after_20-git-hooks.sh.tmpl
+# also runs it, so a fresh clone is protected after the first apply.
+set -eu
+
+repo_root=$(git rev-parse --show-toplevel)
+exec "$repo_root/scripts/leak-check.sh"

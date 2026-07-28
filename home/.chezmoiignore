@@ -3,7 +3,16 @@ Files excluded from the target state, evaluated per host.
 
 This is how a whole file disappears on a host that should not have it, rather
 than rendering to something empty or commented out.
+
+This file also doubles as the single choke point for validating the host slug.
+It is rendered on every apply, so failing here fails the whole run with a
+message that says what is actually wrong. Without it, an unknown slug surfaces
+as `nil data; no entry for key "class"` from whichever template happened to be
+rendered first, which says nothing useful about the real mistake.
 */ -}}
+{{- if not (hasKey .hosts .hostID) -}}
+{{-   fail (printf "unknown host slug %q — add it to home/.chezmoidata/hosts.toml, or correct hostID in this host's chezmoi config" .hostID) -}}
+{{- end -}}
 {{ if ne (index .hosts .hostID).class "macos" -}}
 # Homebrew is macOS-only here. A Linux/WSL host gets no ~/.Brewfile at all.
 .Brewfile

@@ -40,6 +40,31 @@ The cost, honestly stated: chezmoi copies files instead of symlinking them, so
 editing `~/.zshrc` no longer edits the repo. Use `chezmoi edit` and
 `chezmoi apply`. That is a real habit change and the main thing given up.
 
+### Checks
+
+Two things guard this repo, both runnable by hand:
+
+```
+./scripts/render-check.sh    # render every host profile and assert on the output
+./scripts/install-hooks.sh   # enable the tracked pre-commit hook (idempotent)
+```
+
+`render-check.sh` renders every host profile — macOS with and without a GUI,
+WSL, Linux — and asserts on what comes out: that host identity is baked in, that
+platform-specific files appear only where they belong, that every rendered shell
+file parses. It asserts on *output* rather than exit codes, because an
+unanswered prompt in non-interactive mode does not fail; chezmoi substitutes the
+prompt text as the value and exits successfully. CI runs this same script, so a
+green build can be reproduced locally before pushing.
+
+`leak-check.sh` runs from the pre-commit hook and refuses commits whose staged
+changes match a list of strings you do not want published. That list is *not* in
+this repository — it lives at `~/.config/dotfiles/forbidden-patterns`, one
+regex per line, and the check is a silent no-op when the file is absent. The
+script never prints a pattern, a matching line, or a filename; it reports a
+count and a line number, which is enough to find the problem on the machine that
+already has the list and useless anywhere else.
+
 ### Install
 
 Clean install:
