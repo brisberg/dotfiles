@@ -1,0 +1,24 @@
+# PATH construction.
+#
+# This lives in conf.d rather than zprofile for two independent reasons:
+#
+#   1. On WSL, zsh is exec'd from bashrc and so is NOT a login shell. zprofile
+#      never runs there. Anything both hosts need must be reachable from zshrc.
+#   2. On macOS, /etc/zprofile runs path_helper, which reorders PATH. Setting
+#      PATH before that point means having it silently rearranged afterwards.
+#
+# Sourcing from zshrc happens after both, so what is prepended here stays
+# prepended.
+
+typeset -U path   # keep entries unique, first occurrence wins
+
+# Order matters and matches the previous setup: cargo ahead of the system,
+# Homebrew ahead of cargo, and ~/bin last as a low-priority fallback.
+path=("$HOME/.cargo/bin" $path)
+{{ if eq (index .hosts .hostID).class "macos" -}}
+# Apple Silicon prefix; Intel Macs would use /usr/local.
+path=(/opt/homebrew/bin $path)
+{{ end -}}
+path+=("$HOME/bin")
+
+export PATH
