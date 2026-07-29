@@ -25,16 +25,16 @@ failures=0
 fail() { echo "  FAIL: $*" >&2; failures=$((failures + 1)); }
 pass() { echo "  ok: $*"; }
 
-# profile | slug | synthetic host TOML (empty = defined in hosts.toml) | brewfile | casks
+# profile | slug | synthetic host TOML (empty = defined in hosts.toml) | brewfile | casks | bashrc
 PROFILES=(
-  "macos-gui|angler||yes|yes"
-  "wsl|cerberus||no|no"
-  "macos-headless|ci-macos-headless|class = \"macos\"\ngui = false|yes|no"
-  "linux|ci-linux|class = \"linux\"\ngui = false|no|no"
+  "macos-gui|angler||yes|yes|no"
+  "wsl|cerberus||no|no|yes"
+  "macos-headless|ci-macos-headless|class = \"macos\"\ngui = false|yes|no|no"
+  "linux|ci-linux|class = \"linux\"\ngui = false|no|no|yes"
 )
 
 for entry in "${PROFILES[@]}"; do
-  IFS='|' read -r profile slug synthetic want_brewfile want_casks <<<"$entry"
+  IFS='|' read -r profile slug synthetic want_brewfile want_casks want_bashrc <<<"$entry"
   echo
   echo "=== profile: $profile (slug=$slug) ==="
 
@@ -94,6 +94,13 @@ EOF
     [ "$casks" -eq 0 ] && pass "no casks (headless)" || fail "found $casks casks on a headless profile"
   fi
 
+  # 4b. The bash handoff shim belongs only where bash is the login shell.
+  if [ -f "$dest/.bashrc" ]; then
+    [ "$want_bashrc" = yes ] && pass ".bashrc present" || fail ".bashrc present but should not be"
+  else
+    [ "$want_bashrc" = no ] && pass ".bashrc correctly absent" || fail ".bashrc missing but expected"
+  fi
+
   # 5. Git config parses and carries the identity we supplied.
   email=$(git config --file "$dest/.config/git/config" --get user.email 2>/dev/null || true)
   [ "$email" = "ci@example.invalid" ] && pass "git identity rendered" || fail "git identity wrong: '$email'"
@@ -104,6 +111,14 @@ EOF
     zsh -n "$f" 2>/dev/null || { fail "zsh syntax error in ${f#"$dest"}"; bad=1; }
   done < <(find "$dest" -type f \( -name '*.zsh' -o -name '.zshrc' -o -name '.zshenv' \))
   [ "$bad" -eq 0 ] && pass "all zsh files parse"
+
+  # 6b. Bash files too, where they exist.
+  bad=0
+  for bf in "$dest/.bashrc" "$dest/.bash_profile"; do
+    [ -f "$bf" ] || continue
+    bash -n "$bf" 2>/dev/null || { fail "bash syntax error in ${bf#"$dest"}"; bad=1; }
+  done
+  [ "$bad" -eq 0 ] && pass "bash files parse (or absent)"
 
   # 7. Every rendered script parses. Scripts are executed rather than written to
   #    the destination, so render them explicitly.

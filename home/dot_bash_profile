@@ -1,0 +1,9 @@
+# Login bash shells read this instead of ~/.bashrc, so hand straight over. The
+# switch to zsh lives in exactly one place.
+#
+# The previous version also appended ~/bin and ~/.local/bin to PATH. That is
+# zsh's job now (conf.d/00-path.zsh), and it runs for both login and non-login
+# shells, which is what WSL actually needs — zsh there is exec'd from bashrc and
+# so is never a login shell.
+
+[ -f ~/.bashrc ] && . ~/.bashrc

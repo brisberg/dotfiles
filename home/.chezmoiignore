@@ -13,7 +13,12 @@ rendered first, which says nothing useful about the real mistake.
 {{- if not (hasKey .hosts .hostID) -}}
 {{-   fail (printf "unknown host slug %q — add it to home/.chezmoidata/hosts.toml, or correct hostID in this host's chezmoi config" .hostID) -}}
 {{- end -}}
-{{ if ne (index .hosts .hostID).class "macos" -}}
+{{ if eq (index .hosts .hostID).class "macos" -}}
+# macOS launches zsh directly, so the bash handoff shim is not needed. Shipping
+# it anyway would leave a misleading ~/.bashrc on a machine that never reads it.
+.bashrc
+.bash_profile
+{{ else -}}
 # Homebrew is macOS-only here. A Linux/WSL host gets no ~/.Brewfile at all.
 .Brewfile
 {{ end -}}
