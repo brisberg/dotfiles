@@ -30,7 +30,7 @@ cask "google-chrome"
 # Password manager that keeps all passwords secure behind one password
 cask "1password"
 # Set of tools to manage resources and applications hosted on Google Cloud
-cask "google-cloud-sdk"
+cask "gcloud-cli"
 # Knowledge base and Markdown file editor 
 cask "obsidian"
 # Video conference software
