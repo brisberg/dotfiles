@@ -12,9 +12,29 @@ Include ~/.ssh/config.d/*
 
 Host github.com
   User git
+  # Key naming scheme: id_<account>_<service>. The old name here was
+  # `github_rsa`, which was both inaccurate (the key is ed25519) and ambiguous
+  # once a machine holds more than one GitHub key — nothing in the name said
+  # which account it authenticates as.
+  #
   # Per-user by construction — each user has their own key at this path inside
   # their own home directory, so no templating is needed.
   #
   # This block was previously appended to ~/.ssh/config by zsh/tools/github.zsh
   # on every single shell start, guarded only by a grep.
-  IdentityFile ~/.ssh/github_rsa
+  IdentityFile ~/.ssh/id_brisberg_github
+
+  # Offer ONLY the key named above. Without this, ssh also offers every key the
+  # agent holds — and GitHub decides which account you are from the first key it
+  # accepts, not from which key you meant. So on any machine whose agent has
+  # picked up a second GitHub key, the default identity silently becomes
+  # whichever one the agent happens to list first, including for pushes to this
+  # repository. Observed in practice, not theorised.
+  #
+  # A stale key is enough on its own: `ssh-add` keeps a key in memory after the
+  # file is deleted, so removing a key file does not retire it. `ssh-add -D`
+  # does.
+  #
+  # This costs nothing on a machine with one key, which is why it belongs here
+  # rather than in a drop-in: it makes the default deterministic everywhere.
+  IdentitiesOnly yes

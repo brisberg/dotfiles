@@ -9,7 +9,11 @@
 
 # Usage
 #   chmod +x autokey-github.sh
-#   ./autokey-github.sh <YOUR-GITHUB-ACCESS-TOKEN>
+#   ./autokey-github.sh <YOUR-GITHUB-ACCESS-TOKEN> [KEY-PATH]
+#
+# KEY-PATH follows the id_<account>_<service> scheme and defaults to the path
+# ~/.ssh/config names for github.com. Pass it explicitly when generating a key
+# for a different account, or ssh will never offer the result.
 
 # Reference
 #   https://nathanielhoag.com/blog/2014/05/26/automate-ssh-key-generation-and-deployment/
@@ -23,10 +27,11 @@ set -e
 # Generate SSH Key and Deploy to Github
 
 TOKEN=$1 # must have admin:public_key for DELETE
+KEYFILE=${2:-$HOME/.ssh/id_brisberg_github}
 
-ssh-keygen -q -b 4096 -t rsa -N "" -f ~/.ssh/github_rsa
+ssh-keygen -q -t ed25519 -N "" -f "$KEYFILE"
 
-PUBKEY=`cat ~/.ssh/github_rsa.pub`
+PUBKEY=`cat "$KEYFILE.pub"`
 TITLE=$(hostname -s)-${OSTYPE//[0-9.]/}
 
 RESPONSE=`curl -s -H "Authorization: token ${TOKEN}" \
@@ -43,7 +48,7 @@ echo "Public key deployed to remote service"
 # Add SSH Key to the local ssh-agent"
 
 eval "$(ssh-agent -s)"
-ssh-add ~/.ssh/github_rsa
+ssh-add "$KEYFILE"
 
 echo "Added SSH key to the ssh-agent"
 
