@@ -1,10 +1,13 @@
 {{- $class := (index .hosts .hostID).class -}}
 # Git configuration.
 #
-# IMPORTANT: git reads this file ONLY when ~/.gitconfig does not exist. If a
-# stale ~/.gitconfig is left behind — for example the symlink the previous
-# Dotbot setup created — this entire file is silently ignored and nothing
-# appears to be wrong. Removing it is part of cutover.
+# IMPORTANT: if ~/.gitconfig also exists, git reads BOTH — this file first, then
+# ~/.gitconfig — so every key that older file defines silently overrides the one
+# set here, while keys unique to this file still apply. That partial shadowing
+# is what makes it deceptive: most things work, and a few settings quietly come
+# from somewhere else. Verified on git 2.55.
+#
+# Check with `git config --list --show-origin` if anything here seems ignored.
 #
 # Identity is rendered per user from that user's own local chezmoi config, which
 # is how two admin users on one machine share this repo while keeping separate
