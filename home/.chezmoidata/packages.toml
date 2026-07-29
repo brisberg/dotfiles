@@ -1,0 +1,20 @@
+# Package lists for hosts that are not macOS. macOS is covered by the Brewfile,
+# which is the better tool there and already declarative.
+#
+# Parity with the Brewfile is best-effort and maintained by hand. Some entries
+# have no sensible apt equivalent — firebase-cli is an npm package, and awscli
+# is better installed from Amazon's own installer than from apt, where it is
+# usually years stale. Those are deliberately absent rather than approximated
+# with something that behaves differently.
+
+[packages]
+apt = [
+  "clang-format",
+  "curl",
+  "git",
+  "git-extras",
+  "hugo",
+  "python3",
+  "python3-venv",
+  "zsh",
+]

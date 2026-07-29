@@ -1,0 +1,27 @@
+# Known machines, keyed by the host slug each host sets in its own local
+# chezmoi config (see .chezmoi.toml.tmpl).
+#
+# Slugs are opaque and stable by design. Detected hostnames are not usable here:
+# macOS rewrites the short hostname on network changes, so this machine reports
+# something different depending on where it is.
+#
+# Record CAPABILITIES, never identities. "Does this machine have a GUI" is a
+# fact about the machine and is safe to publish. "Whose machine is it" is not,
+# and is not needed — templates branch on what a host can do, not on which host
+# it is. A conditional keyed on a slug is a bug in the making; the moment a
+# second host wants the same behaviour it has to be duplicated.
+#
+# Templates resolve their own host with a single lookup:
+#
+#     {{ $host := index .hosts .hostID }}
+#     {{ if $host.gui }} ... {{ end }}
+
+[hosts.angler]
+# Apple Silicon MacBook Pro. Two users, each with their own identity.
+class = "macos"
+gui = true
+
+[hosts.cerberus]
+# WSL under Windows. No GUI: Linux-side installs are CLI only.
+class = "wsl"
+gui = false

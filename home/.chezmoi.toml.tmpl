@@ -1,0 +1,50 @@
+{{/*
+Local chezmoi configuration, rendered once by `chezmoi init` and written to
+~/.config/chezmoi/chezmoi.toml on each host.
+
+That rendered file is never committed anywhere. It is the entire mechanism by
+which one public repo produces a different result per host and per user: the
+repo holds the logic, this file holds the answers.
+
+Everything prompted for below is machine identity or personal identity, neither
+of which belongs in a public repo. Note what is NOT asked: nothing about a
+private layer, because this repo has no knowledge of one.
+
+Re-running `chezmoi init` keeps existing answers — promptStringOnce only asks
+for values that are not already set. To change an answer later, edit
+~/.config/chezmoi/chezmoi.toml directly, or `chezmoi init --force` to be
+re-prompted for everything.
+
+The prompt strings below are kept SHORT AND STABLE on purpose. `--promptString`
+matches on the prompt text, not on the variable name, so these double as the
+non-interactive API used by CI:
+
+    chezmoi init --promptString 'host slug=angler,git name=x,git email=y@z'
+
+Changing a prompt string is therefore a breaking change to that interface.
+Beware: when a prompt goes unanswered non-interactively, chezmoi substitutes the
+prompt text itself as the value rather than failing, so a typo yields a config
+containing "host slug" instead of an error. CI must assert on rendered output,
+not merely on a zero exit code.
+*/}}
+{{- $hostID   := promptStringOnce . "hostID"   "host slug" -}}
+{{- $gitName  := promptStringOnce . "gitName"  "git name" -}}
+{{- $gitEmail := promptStringOnce . "gitEmail" "git email" -}}
+
+{{/*
+Pin the source directory to wherever `chezmoi init --source=...` was run.
+
+chezmoi does NOT persist --source on its own: without this line the generated
+config has no sourceDir and every later command silently falls back to
+~/.local/share/chezmoi, leaving two clones of the repo to drift apart.
+
+`| dir` strips the .chezmoiroot component, so this records the repository root
+and chezmoi re-applies .chezmoiroot itself. Moving the repo means re-running
+`chezmoi init --source=<new path>`.
+*/}}
+sourceDir = {{ .chezmoi.sourceDir | dir | quote }}
+
+[data]
+hostID = {{ $hostID | quote }}
+gitName = {{ $gitName | quote }}
+gitEmail = {{ $gitEmail | quote }}

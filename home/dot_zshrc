@@ -1,0 +1,31 @@
+# Interactive shells.
+#
+# This file is a loader and nothing else. Everything real lives in one of two
+# directories, and the split is the whole point:
+#
+#   conf.d   managed by chezmoi, overwritten on every apply, version controlled
+#   local.d  not managed by anything, never overwritten, never published
+#
+# local.d loads last so it always wins. That is the seam a host uses to add or
+# override configuration without forking this repo.
+#
+# To add configuration: `chezmoi edit ~/.config/zsh/conf.d/NN-thing.zsh`.
+# Do not add logic to this file.
+
+# Fall back in case zshenv did not run (rare, but a broken shell is worse).
+: "${ZSH_CONF_D:=${XDG_CONFIG_HOME:-$HOME/.config}/zsh/conf.d}"
+: "${ZSH_LOCAL_D:=${XDG_CONFIG_HOME:-$HOME/.config}/zsh/local.d}"
+
+# (N) is the null-glob qualifier: a missing directory or an empty one expands to
+# nothing instead of erroring, so local.d need never exist.
+for _zsh_conf in "$ZSH_CONF_D"/*.zsh(N) "$ZSH_LOCAL_D"/*.zsh(N); do
+  source "$_zsh_conf"
+done
+unset _zsh_conf
+
+# DEPRECATED: the previous private-config seam. Superseded by local.d.
+# Retained only so the WSL host does not silently lose configuration during the
+# migration. Remove at Stage 11 once that host's content has moved to local.d.
+if [[ -f ~/.zshrc-private ]]; then
+  source ~/.zshrc-private
+fi

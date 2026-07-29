@@ -1,0 +1,21 @@
+# Godot Game Engine — https://godotengine.org/
+#
+# The engine ships inside a Steam install, so the path differs per platform.
+# This was previously a commented-out "# For Cerberus-PC" line that had to be
+# swapped by hand; it is now an actual conditional.
+
+{{ $class := (index .hosts .hostID).class -}}
+{{ if eq $class "macos" -}}
+_godot_bin="$HOME/Library/Application Support/Steam/steamapps/common/Godot Engine/Godot.app/Contents/MacOS/Godot"
+{{ else if eq $class "wsl" -}}
+_godot_bin="/mnt/c/Program Files (x86)/Steam2/steamapps/common/Godot Engine/godot.windows.opt.tools.64.exe"
+{{ else -}}
+_godot_bin=""
+{{ end -}}
+
+if [[ -n $_godot_bin && -f $_godot_bin ]]; then
+  alias godot="\"$_godot_bin\""
+  # GUT unit testing framework — https://github.com/bitwes/Gut
+  alias gut='godot --path $PWD -s addons/gut/gut_cmdln.gd'
+fi
+unset _godot_bin

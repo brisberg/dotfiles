@@ -1,0 +1,37 @@
+# Aliases.
+#
+# oh-my-zsh users are generally encouraged to put these under ZSH_CUSTOM, but
+# keeping them here means they are version controlled with everything else and
+# survive replacing the framework.
+
+## Dotfiles
+# Replaces the old `dotfiles-install`, which did `git checkout $HOST_SHORT` to
+# pick up a per-host branch. Those branches are gone — host differences are
+# template data now, so every host tracks the same ref.
+alias dotfiles-edit='chezmoi edit'
+alias dotfiles-diff='chezmoi diff'
+alias dotfiles-apply='chezmoi apply'
+alias dotfiles-cd='chezmoi cd'
+alias dotfiles-update='chezmoi update'   # git pull followed by apply
+
+{{ if eq (index .hosts .hostID).class "macos" -}}
+## Homebrew
+# Homebrew runs as a dedicated `homebrew` user on this machine so that several
+# admin users can share a single installation without fighting over ownership.
+alias brew='sudo -Hu homebrew brew'
+
+{{ end -}}
+## Git
+# TODO(brisberg): some of these overlap with the omz git plugin. Worth auditing.
+alias gs="git status"
+alias gci="git commit"
+alias gcim="git commit -m"
+alias gaa="git add ."
+alias gap="git add -p"
+alias grbc="git rebase --continue"
+alias grba="git rebase --abort"
+alias gl="git log --all --graph --decorate --oneline --simplify-by-decoration"
+
+## Shell environment
+alias path-pretty-print='echo "$PATH" | tr ":" "\n"'
+alias ppath=path-pretty-print

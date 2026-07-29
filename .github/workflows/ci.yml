@@ -1,0 +1,50 @@
+name: CI
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+
+# The real logic lives in scripts/render-check.sh so it can be run identically
+# on a laptop before pushing. This workflow is deliberately a thin wrapper: CI
+# that cannot be reproduced locally is CI that gets ignored.
+#
+# Note: there is no forbidden-pattern check here. Logs from a public repository
+# are public, and the patterns worth checking for are exactly the strings that
+# must not be published — so that check runs as a local pre-commit hook, reading
+# a list this repository does not contain. See scripts/leak-check.sh.
+
+jobs:
+  render:
+    name: Render all host profiles
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install zsh
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq zsh
+
+      - name: Install chezmoi
+        run: sh -c "$(curl -fsLS get.chezmoi.io)" -- -b "$HOME/.local/bin"
+
+      - name: Render and assert
+        run: CHEZMOI="$HOME/.local/bin/chezmoi" ./scripts/render-check.sh
+
+  gitleaks:
+    name: Scan for committed credentials
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # gitleaks scans history, not just the tip
+
+      - uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        # Free for personal public repositories. GitHub Organizations need a
+        # GITLEAKS_LICENSE, which does not apply to a user-owned repo.
+        #
+        # gitleaks detects credential SHAPES — keys, tokens, high-entropy
+        # strings. It would not have caught the work email address that was
+        # committed here, because an email is not a credential. That class of
+        # problem is the pre-commit hook's job.

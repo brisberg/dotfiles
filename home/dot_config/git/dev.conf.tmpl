@@ -1,0 +1,16 @@
+# Public identity, applied inside ~/DevProjects/ only.
+#
+# Included conditionally from config, never globally. Keeping it in its own file
+# rather than inline means every identity on this machine has the same shape —
+# one file per identity, selected by directory — so adding another is a matter
+# of dropping in a file, not restructuring anything.
+#
+# No credential helper or ssh key is set here. Both are already correct by
+# default: the helper is chosen per host class in config, and the default key
+# path resolves inside whichever user's home directory is running git. An
+# identity that needs a NON-default key sets core.sshCommand in its own file,
+# which is what keeps the commit author and the pushing key from drifting apart.
+
+[user]
+	name = {{ .gitName | quote }}
+	email = {{ .gitEmail | quote }}

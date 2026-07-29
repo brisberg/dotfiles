@@ -1,0 +1,28 @@
+# Loaded for EVERY zsh: interactive or not, login or not.
+#
+# Keep this file to plain environment variables that later files depend on.
+# Two things deliberately do not happen here:
+#
+#   - No PATH manipulation. On macOS /etc/zprofile runs path_helper AFTER
+#     zshenv, which reorders PATH and would undo anything set here. PATH lives
+#     in conf.d/00-path.zsh, which zshrc sources after all of that has settled.
+#   - Nothing slow. This runs for every non-interactive zsh, including scripts.
+
+export XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
+export XDG_DATA_HOME="${XDG_DATA_HOME:-$HOME/.local/share}"
+
+# Stable machine identity, chosen once per host and baked in at apply time.
+# Deliberately NOT `hostname -s`: macOS rewrites the short hostname on network
+# changes, so the detected value is different depending on where the laptop is.
+export HOST_ID={{ .hostID | quote }}
+export HOST_CLASS={{ (index .hosts .hostID).class | quote }}
+
+# Where the shell configuration actually lives.
+#   conf.d  is managed by chezmoi and will be overwritten on apply
+#   local.d is NOT managed; anything dropped there survives and loads last
+export ZSH_CONF_D="$XDG_CONFIG_HOME/zsh/conf.d"
+export ZSH_LOCAL_D="$XDG_CONFIG_HOME/zsh/local.d"
+
+# The chezmoi source tree. `| dir` strips the .chezmoiroot component so this
+# points at the repo root rather than at home/ inside it.
+export DOTFILES={{ .chezmoi.sourceDir | dir | quote }}

@@ -1,0 +1,109 @@
+{{- $class := (index .hosts .hostID).class -}}
+# Git configuration.
+#
+# IMPORTANT: if ~/.gitconfig also exists, git reads BOTH — this file first, then
+# ~/.gitconfig — so every key that older file defines silently overrides the one
+# set here, while keys unique to this file still apply. That partial shadowing
+# is what makes it deceptive: most things work, and a few settings quietly come
+# from somewhere else. Verified on git 2.55.
+#
+# Check with `git config --list --show-origin` if anything here seems ignored.
+#
+# Identity is not set here. It comes from the directory-scoped includes further
+# down, rendered per user from that user's own local chezmoi config, which is
+# how several admin users on one machine share this repo while keeping separate
+# credentials.
+
+[user]
+	# No name or email at this level, deliberately. Every tree that should be
+	# committable maps to an identity below, and useConfigOnly makes git REFUSE
+	# to commit anywhere none of them match rather than inventing an identity
+	# from $USER and the hostname.
+	#
+	# The refusal is the feature. A repository outside every mapped tree is one
+	# whose identity nobody has decided yet, and guessing is exactly how commits
+	# end up attributed to the wrong account.
+	#
+	# Consequence worth knowing: this repo's own chezmoi source directory must
+	# live inside a mapped tree, or you cannot commit changes to it. Bootstrap
+	# with `--source ~/DevProjects/dotfiles` rather than letting chezmoi default
+	# to ~/.local/share/chezmoi.
+	useConfigOnly = true
+
+[push]
+	default = matching
+[pull]
+	# Default to only fast-forward merges
+	ff = only
+[core]
+	autocrlf = input
+
+[credential]
+{{ if eq $class "macos" -}}
+	helper = osxkeychain
+{{- else }}
+	# Plain-text storage in ~/.git-credentials. The previous setup wrote to
+	# ~/.git-creds/<user>, which required creating that directory first; the
+	# default path is already per-user because $HOME is.
+	helper = store
+{{- end }}
+
+[alias]
+	st = "status"
+
+	# Add all local changes and commit with following message
+	ac = "!git add . && git commit -m"
+
+	# Return the name of the current branch (used in other aliases)
+	branch-name = "rev-parse --abbrev-ref HEAD"
+
+	# Updates local origin with remote origin state
+	remote-update = "remote update --prune"
+
+	# Removes all local branches missing from remote origin
+	# From https://youtu.be/mnmYwRoSisg?t=597
+	# Previously carried two bugs that made it fail outright: `--vv` is not a
+	# valid option (only `-vv` is), and `print &1` should be `print $1`.
+	branch-prune = "!git branch -vv | awk '/: gone]/{print $1}' | xargs git branch -d"
+
+	# Writing a local branch description
+	# from https://stackoverflow.com/a/8858853
+	reword = branch --edit-description
+	description = "!git config branch.$(git branch-name).description"
+	desc = description
+
+	# Print commit log as a visual tree graph
+	graph = "log --graph --decorate --oneline"
+
+	# Toolchain commands for @brisberg repositories
+	toolchain-upgrade = "!git fetch toolchain \
+		$(git ls-remote --tags --refs --sort=\"version:refname\" toolchain \
+		| awk -F/ 'END{print$NF}') \
+		&& git merge FETCH_HEAD"
+
+## Directory-scoped identity.
+#
+# This is the only mapping that is the same on every host and every user
+# account, which is why it is the only one that lives in a public repository.
+# Any additional identity — another personal account, an employer — is scoped to
+# its own tree from local.conf below, and nothing here records that such a tree
+# exists.
+#
+# The /i makes the match case-insensitive. macOS filesystems are case-insensitive
+# by default, so without it a path reached as ~/devprojects would match no rule
+# and, under useConfigOnly, refuse to commit for a reason that looks like
+# nonsense.
+[includeIf "gitdir/i:~/DevProjects/"]
+	path = ~/.config/git/dev.conf
+
+## Host-local overrides, loaded last so they win.
+# Not managed by chezmoi and never published. Anything may go here, including
+# further includeIf rules.
+[include]
+	path = ~/.config/git/local.conf
+
+# DEPRECATED: the previous private-config seam, superseded by local.conf above.
+# Retained so no host silently loses configuration mid-migration. Remove at
+# Stage 11.
+[include]
+	path = ~/.git-private.conf

@@ -40,32 +40,93 @@ The cost, honestly stated: chezmoi copies files instead of symlinking them, so
 editing `~/.zshrc` no longer edits the repo. Use `chezmoi edit` and
 `chezmoi apply`. That is a real habit change and the main thing given up.
 
+### Checks
+
+Two things guard this repo, both runnable by hand:
+
+```
+./scripts/render-check.sh    # render every host profile and assert on the output
+./scripts/install-hooks.sh   # enable the tracked pre-commit hook (idempotent)
+```
+
+`render-check.sh` renders every host profile — macOS with and without a GUI,
+WSL, Linux — and asserts on what comes out: that host identity is baked in, that
+platform-specific files appear only where they belong, that every rendered shell
+file parses. It asserts on *output* rather than exit codes, because an
+unanswered prompt in non-interactive mode does not fail; chezmoi substitutes the
+prompt text as the value and exits successfully. CI runs this same script, so a
+green build can be reproduced locally before pushing.
+
+`leak-check.sh` runs from the pre-commit hook and refuses commits whose staged
+changes match a list of strings you do not want published. That list is *not* in
+this repository — it lives at `~/.config/dotfiles/forbidden-patterns`, one
+regex per line, and the check is a silent no-op when the file is absent. The
+script never prints a pattern, a matching line, or a filename; it reports a
+count and a line number, which is enough to find the problem on the machine that
+already has the list and useless anywhere else.
+
 ### Install
 
-Clean install:
+On a new host, one command. It installs chezmoi if needed, clones this repo,
+prompts for the host slug and git identity, and applies everything:
 
 ```
-git clone https://github.com/brisberg/dotfiles.git
-cd dotfiles
-git checkout ${hostname -s} # checkout machine specific version
-sh ./install
+sh -c "$(curl -fsLS get.chezmoi.io)" -- init --apply brisberg/dotfiles
 ```
 
-### Branch Structure
+To keep the source where you already work, rather than chezmoi's default
+`~/.local/share/chezmoi`:
 
-This repo uses a branching strategy to manage related configuration changes between hosts.
+```
+git clone git@github.com:brisberg/dotfiles.git ~/DevProjects/dotfiles
+chezmoi init --source ~/DevProjects/dotfiles --apply
+```
 
-`main` - Core configs common to all hosts. Majority of configurations should go here.
-`${hostname -s}` - A series of branches for each host I manage. Each host should checkout the branch of them.
+The three prompts — host slug, git name, git email — are answered once per host
+per user and stored in `~/.config/chezmoi/chezmoi.toml`, which is never
+committed. That file is the entire mechanism by which one repo produces a
+different result for each host and each user: the repo holds the logic, the
+local config holds the answers.
 
-Making changes to the `main` branch should then be merged / cherry-picked into a host branch.
+A host slug must exist in [`home/.chezmoidata/hosts.toml`](home/.chezmoidata/hosts.toml).
+An unknown one fails the apply with a message saying so.
 
-I will need to document here how these branches are linked, and possibly provide script aliases for making the updates easier.
+### Day to day
 
-Note:
-In the future I may create a more complex tiered approach. For example have a `linux_64` branch which is common to all Linux hosts, and each linux host branch should base off that instead of `main`.
+```
+chezmoi edit ~/.zshrc     # edit the source, not the copy in $HOME
+chezmoi diff              # preview
+chezmoi apply             # write it
+chezmoi update            # git pull, then apply
+chezmoi re-add ~/.zshrc   # pull a hand-edit in $HOME back into the source
+```
+
+Aliases for these are defined in
+[`conf.d/40-aliases.zsh`](home/dot_config/zsh/conf.d/40-aliases.zsh.tmpl)
+(`dotfiles-edit`, `dotfiles-diff`, `dotfiles-apply`, `dotfiles-update`).
+
+The thing to internalise coming from a symlink manager: **editing a file in
+`$HOME` does not edit the repo.** chezmoi writes copies. Use `chezmoi edit`, or
+`chezmoi re-add` afterwards, or the change lives only in the generated copy and
+the next apply reverts it.
+
+### Adding configuration
+
+Shell configuration goes in `home/dot_config/zsh/conf.d/`, numbered for load
+order. Anything host-specific branches on a *capability* rather than a hostname:
+
+```
+{{ $host := index .hosts .hostID }}
+{{ if $host.gui }} ... {{ end }}
+```
+
+Host-local additions that should not be committed go in
+`~/.config/zsh/local.d/`, `~/.config/git/local.conf`, or `~/.ssh/config.d/`.
+None of those are managed here, so they survive every apply.
 
 ### Homebrew
 
-Brewfile represents currently installed programs and utilities.
-Use `brew bundle --global` to install all fresh casks.
+[`home/dot_Brewfile.tmpl`](home/dot_Brewfile.tmpl) renders to `~/.Brewfile`, with
+GUI casks included only on hosts that have a display. `brew bundle --global`
+works by hand; a chezmoi script runs it automatically when the package list
+changes.

@@ -1,0 +1,30 @@
+# Bash is not the shell used here; zsh is. On WSL the terminal starts bash, so
+# this file's only job is to hand over.
+#
+# Two guards matter:
+#
+#   - Interactive shells only. The previous version tested `test -t 1`, which is
+#     also true for plenty of non-interactive things that happen to have a
+#     terminal attached; exec'ing zsh under those breaks `scp`, `rsync` and
+#     `ssh host command` in ways that are miserable to diagnose.
+#   - Only when zsh is actually installed, so a host part-way through
+#     provisioning still gets a usable bash instead of a broken login.
+#
+# Everything else the Debian default bashrc carried — history sizes, ls colours,
+# completion, the fancy prompt — is deliberately dropped. None of it runs once
+# we exec, and keeping it implied bash was a supported environment here.
+
+case $- in
+  *i*) ;;
+    *) return ;;
+esac
+
+if command -v zsh >/dev/null 2>&1; then
+  SHELL=$(command -v zsh)
+  export SHELL
+  exec zsh
+fi
+
+# Fallback only: zsh is not installed yet. Minimal, but not hostile.
+PS1='\u@\h:\w\$ '
+[ -f ~/.bash_aliases ] && . ~/.bash_aliases
