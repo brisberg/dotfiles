@@ -31,6 +31,19 @@ not merely on a zero exit code.
 {{- $gitName  := promptStringOnce . "gitName"  "git name" -}}
 {{- $gitEmail := promptStringOnce . "gitEmail" "git email" -}}
 
+{{/*
+Pin the source directory to wherever `chezmoi init --source=...` was run.
+
+chezmoi does NOT persist --source on its own: without this line the generated
+config has no sourceDir and every later command silently falls back to
+~/.local/share/chezmoi, leaving two clones of the repo to drift apart.
+
+`| dir` strips the .chezmoiroot component, so this records the repository root
+and chezmoi re-applies .chezmoiroot itself. Moving the repo means re-running
+`chezmoi init --source=<new path>`.
+*/}}
+sourceDir = {{ .chezmoi.sourceDir | dir | quote }}
+
 [data]
 hostID = {{ $hostID | quote }}
 gitName = {{ $gitName | quote }}

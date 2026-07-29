@@ -42,7 +42,12 @@ On the first run against a machine that was set up by hand, the usual cause is
 casks whose applications already exist in /Applications but were installed
 manually, so Homebrew will not overwrite them. Have Homebrew adopt them:
 
-    HOMEBREW_CASK_OPTS=--adopt brew bundle install --global --no-upgrade
+    HOMEBREW_CASK_OPTS=--adopt command brew bundle install --global --no-upgrade
+
+`command` is required, and only in an interactive shell: it bypasses the
+`brew` alias, which is `sudo -Hu homebrew brew`. Without it, -H points
+--global at /Users/homebrew/.Brewfile ("Error: No Brewfile found") and
+sudo's env_reset silently discards HOMEBREW_CASK_OPTS.
 
 Then re-run `chezmoi apply`.
 GUIDANCE
