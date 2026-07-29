@@ -101,9 +101,59 @@ EOF
     [ "$want_bashrc" = no ] && pass ".bashrc correctly absent" || fail ".bashrc missing but expected"
   fi
 
-  # 5. Git config parses and carries the identity we supplied.
-  email=$(git config --file "$dest/.config/git/config" --get user.email 2>/dev/null || true)
-  [ "$email" = "ci@example.invalid" ] && pass "git identity rendered" || fail "git identity wrong: '$email'"
+  # 5. Git identity, tested functionally rather than textually.
+  #
+  #    Identity now comes from a directory-scoped includeIf, and git evaluates
+  #    those only against a real repository at a real path. `git config --file`
+  #    would report nothing and pass regardless, so this builds throwaway repos
+  #    under a HOME pointed at the rendered tree.
+  #
+  #    XDG_CONFIG_HOME and GIT_CONFIG_GLOBAL are unset explicitly. Either one
+  #    silently substitutes the developer's own git config for the rendered one,
+  #    which is a contamination that makes this check pass for the wrong reason
+  #    — it has already happened once while developing it.
+  gitenv() { env -u XDG_CONFIG_HOME -u GIT_CONFIG_GLOBAL HOME="$dest" "$@"; }
+
+  #    (a) Mapped tree: the rendered identity applies.
+  mkdir -p "$dest/DevProjects/probe"
+  gitenv git -C "$dest/DevProjects/probe" init -q 2>/dev/null
+  got=$(gitenv git -C "$dest/DevProjects/probe" config --get user.email 2>/dev/null || true)
+  [ "$got" = "ci@example.invalid" ] &&
+    pass "identity resolves under DevProjects" ||
+    fail "DevProjects identity wrong: '$got'"
+
+  #    (b) Unmapped tree: git must REFUSE. This is user.useConfigOnly doing its
+  #        job — without it git invents an identity from $USER and the hostname
+  #        and commits happily under the wrong name.
+  mkdir -p "$dest/unmapped/probe"
+  gitenv git -C "$dest/unmapped/probe" init -q 2>/dev/null
+  if gitenv git -C "$dest/unmapped/probe" commit -q --allow-empty -m probe >/dev/null 2>&1; then
+    fail "an unmapped directory was committable; useConfigOnly is not in effect"
+  else
+    pass "unmapped directory refuses to commit"
+  fi
+
+  #    (c) The local.conf seam. The private layer's entire contract is that it
+  #        can add an identity for a tree the public repo has never heard of.
+  #        Tested with a deliberately meaningless tree name: this file must not
+  #        record the name of any real private tree, and does not need to in
+  #        order to prove the mechanism.
+  mkdir -p "$dest/Elsewhere/probe" "$dest/.config/git"
+  cat >"$dest/.config/git/local.conf" <<EOF
+[includeIf "gitdir/i:~/Elsewhere/"]
+	path = ~/.config/git/elsewhere.conf
+EOF
+  cat >"$dest/.config/git/elsewhere.conf" <<EOF
+[user]
+	name = seam-probe
+	email = seam@example.invalid
+EOF
+  gitenv git -C "$dest/Elsewhere/probe" init -q 2>/dev/null
+  got=$(gitenv git -C "$dest/Elsewhere/probe" config --get user.email 2>/dev/null || true)
+  [ "$got" = "seam@example.invalid" ] &&
+    pass "local.conf can add an identity for an unknown tree" ||
+    fail "local.conf seam broken: '$got'"
+  rm -f "$dest/.config/git/local.conf" "$dest/.config/git/elsewhere.conf"
 
   # 6. Every rendered zsh file parses.
   bad=0

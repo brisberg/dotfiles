@@ -41,13 +41,43 @@ done
 
 echo
 echo "=== git ==="
-origin=$(git config --list --show-origin 2>/dev/null | grep -m1 'user\.email' | awk '{print $1}')
-case "$origin" in
-  *".config/git/config") ok "identity comes from the managed config" ;;
-  "")                    bad "no user.email resolved at all" ;;
-  *)                     bad "identity comes from $origin, not the managed config" ;;
-esac
-echo "        effective: $(git config --get user.name 2>/dev/null) <$(git config --get user.email 2>/dev/null)>"
+# Identity is directory-scoped, so there is no single "the" identity to read and
+# nothing useful to learn from the current directory. These probes ask the only
+# question that matters: does the right identity appear in a mapped tree, and
+# does git refuse in an unmapped one.
+probe=$(mktemp -d)
+trap 'rm -rf "$probe"' EXIT
+
+if [ "$(git config --get user.useConfigOnly)" = "true" ]; then
+  ok "useConfigOnly set — git will not invent an identity"
+else
+  bad "useConfigOnly is not set; an unmapped repo will commit as \$USER@\$(hostname)"
+fi
+
+mkdir -p "$HOME/DevProjects/.doctor-probe"
+git -C "$HOME/DevProjects/.doctor-probe" init -q 2>/dev/null
+pub=$(git -C "$HOME/DevProjects/.doctor-probe" config --get user.email 2>/dev/null || true)
+if [ -n "$pub" ]; then
+  ok "DevProjects identity: $(git -C "$HOME/DevProjects/.doctor-probe" config --get user.name) <$pub>"
+else
+  bad "no identity resolves under ~/DevProjects"
+fi
+rm -rf "$HOME/DevProjects/.doctor-probe"
+
+git -C "$probe" init -q 2>/dev/null
+if git -C "$probe" commit -q --allow-empty -m probe >/dev/null 2>&1; then
+  bad "an unmapped directory is committable — identity would be guessed"
+else
+  ok "unmapped directories refuse to commit"
+fi
+
+# Additional identities come from the host-local layer and are counted, never
+# named. Printing the tree names would put them on screen on a machine whose
+# whole point is that its screen is safe to show people.
+extra=0
+[ -f "$HOME/.config/git/local.conf" ] &&
+  extra=$(grep -c '^\[includeIf' "$HOME/.config/git/local.conf" 2>/dev/null || echo 0)
+ok "additional directory-scoped identities: $extra"
 
 echo
 echo "=== shell ==="

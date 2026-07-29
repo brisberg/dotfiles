@@ -9,13 +9,26 @@
 #
 # Check with `git config --list --show-origin` if anything here seems ignored.
 #
-# Identity is rendered per user from that user's own local chezmoi config, which
-# is how two admin users on one machine share this repo while keeping separate
+# Identity is not set here. It comes from the directory-scoped includes further
+# down, rendered per user from that user's own local chezmoi config, which is
+# how several admin users on one machine share this repo while keeping separate
 # credentials.
 
 [user]
-	name = {{ .gitName | quote }}
-	email = {{ .gitEmail | quote }}
+	# No name or email at this level, deliberately. Every tree that should be
+	# committable maps to an identity below, and useConfigOnly makes git REFUSE
+	# to commit anywhere none of them match rather than inventing an identity
+	# from $USER and the hostname.
+	#
+	# The refusal is the feature. A repository outside every mapped tree is one
+	# whose identity nobody has decided yet, and guessing is exactly how commits
+	# end up attributed to the wrong account.
+	#
+	# Consequence worth knowing: this repo's own chezmoi source directory must
+	# live inside a mapped tree, or you cannot commit changes to it. Bootstrap
+	# with `--source ~/DevProjects/dotfiles` rather than letting chezmoi default
+	# to ~/.local/share/chezmoi.
+	useConfigOnly = true
 
 [push]
 	default = matching
@@ -69,11 +82,19 @@
 		&& git merge FETCH_HEAD"
 
 ## Directory-scoped identity.
-# The target is host-local and untracked. Git silently ignores an includeIf
-# whose file does not exist, so a host that does not need this needs no
-# configuration at all.
-[includeIf "gitdir:~/WorkProjects/work/"]
-	path = ~/WorkProjects/work/.git-work.conf
+#
+# This is the only mapping that is the same on every host and every user
+# account, which is why it is the only one that lives in a public repository.
+# Any additional identity — another personal account, an employer — is scoped to
+# its own tree from local.conf below, and nothing here records that such a tree
+# exists.
+#
+# The /i makes the match case-insensitive. macOS filesystems are case-insensitive
+# by default, so without it a path reached as ~/devprojects would match no rule
+# and, under useConfigOnly, refuse to commit for a reason that looks like
+# nonsense.
+[includeIf "gitdir/i:~/DevProjects/"]
+	path = ~/.config/git/dev.conf
 
 ## Host-local overrides, loaded last so they win.
 # Not managed by chezmoi and never published. Anything may go here, including
