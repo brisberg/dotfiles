@@ -48,6 +48,20 @@
 	helper = store
 {{- end }}
 
+# Git LFS. `git lfs install` writes this block to ~/.gitconfig, which is the
+# file this config is trying to replace — and a ~/.gitconfig that exists at all
+# is a hazard here, because git reads it AFTER this file and every key it sets
+# silently wins. Declaring the filters here means the hook-up is managed,
+# identical on every host, and `git lfs install` has nothing left to add.
+#
+# Shared by every identity deliberately: LFS is a transport detail of a
+# repository, not a property of who is committing to it.
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+
 [alias]
 	st = "status"
 
