@@ -102,7 +102,12 @@ echo
 echo "=== leak guard ==="
 pf="${DOTFILES_FORBIDDEN_PATTERNS:-$HOME/.config/dotfiles/forbidden-patterns}"
 if [ -f "$pf" ]; then
-  ok "pattern list present ($(grep -cvE '^\s*(#|$)' "$pf") active)"
+  # The list may carry a `# serial: N` line. Report it if so: the list is not in
+  # this repository and is supplied per host, so the serial is the only thing
+  # that says which revision of it a given host actually has. Absent is fine —
+  # a hand-written list need not carry one.
+  ser=$(sed -n 's/^#[[:space:]]*serial:[[:space:]]*\([0-9][0-9]*\).*/\1/p' "$pf" | head -1)
+  ok "pattern list present ($(grep -cvE '^\s*(#|$)' "$pf") active, serial ${ser:-unversioned})"
   hp=$(git -C "${src:-$PWD}/.." config --get core.hooksPath 2>/dev/null || true)
   [ "$hp" = githooks ] && ok "pre-commit hook enabled" || bad "hooksPath is '${hp:-unset}', expected githooks"
 else
