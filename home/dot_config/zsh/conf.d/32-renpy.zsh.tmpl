@@ -1,0 +1,29 @@
+# Ren'py Visual Novel Engine — https://www.renpy.org
+#
+# The engine ships in a launcher script (`renpy.sh`) which takes a project directory
+# as the first argument. Location may differ between hosts.
+
+{{ $class := (index .hosts .hostID).class -}}
+{{ if eq $class "macos" -}}
+{{   $renpySh := "/Applications/renpy-8.5.3-sdk/renpy.sh" -}}
+if [[ -x "{{ $renpySh }}" ]]; then
+  renpy() {
+    "{{ $renpySh }}" "$@"
+  }
+else
+  renpy() {
+    echo "renpy: launcher not found or not executable at {{ $renpySh }}" >&2
+    return 1
+  }
+fi
+{{ else if eq $class "wsl" -}}
+renpy() {
+  echo "renpy: launcher path not yet configured for WSL — edit renpy.sh.tmpl and set it" >&2
+  return 1
+}
+{{ else -}}
+renpy() {
+  echo "renpy: no launcher configured for host class '{{ $class }}'" >&2
+  return 1
+}
+{{ end -}}
