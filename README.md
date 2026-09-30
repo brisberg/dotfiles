@@ -91,6 +91,10 @@ local config holds the answers.
 A host slug must exist in [`home/.chezmoidata/hosts.toml`](home/.chezmoidata/hosts.toml).
 An unknown one fails the apply with a message saying so.
 
+Anything that must be installed for the whole machine rather than per user
+lives in [`machine/`](machine/README.md). Those scripts are run by hand, and
+chezmoi never applies them.
+
 ### Day to day
 
 ```
